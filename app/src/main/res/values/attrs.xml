@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ItemPomodoroState">
+        <attr name="state_stroke_color" format="reference|color"/>
+        <attr name="state_background_color" format="reference|color"/>
+        <attr name="state_icon_src" format="reference"/>
+        <attr name="state_icon_color" format="reference|color"/>
+        <attr name="state_text" format="string"/>
+        <attr name="state_text_color" format="reference|color"/>
+    </declare-styleable>
+</resources>

@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/projetos_pessoais/PomodoroTimer/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
+        <entry key="..\:/projetos_pessoais/PomodoroTimer/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/projetos_pessoais/PomodoroTimer/app/src/main/res/layout/item_pomodoro_stage.xml" value="0.365625" />
+        <entry key="..\:/projetos_pessoais/PomodoroTimer/app/src/main/res/layout/item_pomodoro_state.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

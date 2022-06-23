@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">PomodoroTimer</string>
+    <string name="app_name">Pomodoro Timer</string>
+    <string name="focus_name">Focus</string>
+    <string name="short_break_name">Short Break</string>
+    <string name="long_break_name">Long Break</string>
 </resources>
