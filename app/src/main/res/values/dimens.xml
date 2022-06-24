@@ -8,12 +8,25 @@
     <!-- Margin -->
     <dimen name="large_margin">40dp</dimen>
     <dimen name="small_vertical_margin">6dp</dimen>
+    <dimen name="small_horizontal_margin">12dp</dimen>
     <dimen name="medium_horizontal_margin">16dp</dimen>
+    <dimen name="large_vertical_margin">32dp</dimen>
 
     <!-- Radius -->
     <dimen name="large_radius">22dp</dimen>
+    <dimen name="bg_button_radius">18dp</dimen>
+    <dimen name="bg_play_button_radius">32dp</dimen>
+
+    <!-- Sizes -->
+    <dimen name="button_default_size">80dp</dimen>
+    <dimen name="button_play_height">96dp</dimen>
+    <dimen name="button_play_width">128dp</dimen>
+    <dimen name="timer_size">200dp</dimen>
 
     <!-- Text -->
     <dimen name="text_stage">24sp</dimen>
+    <dimen name="auto_size_granularity">40sp</dimen>
+    <dimen name="auto_size_max">180sp</dimen>
+    <dimen name="auto_size_min">120sp</dimen>
 
 </resources>

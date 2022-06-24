@@ -2,18 +2,98 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
-    android:id="@+id/constraintRoot"
+    android:id="@+id/rootConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".ui.MainActivity">
 
     <com.gmail.devpelegrino.ui.ItemPomodoroState
-        android:id="@+id/item_pomodoro_state"
+        android:id="@+id/itemPomodoroState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/timerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemPomodoroState">
+
+        <TextView
+            android:id="@+id/hourText"
+            android:layout_width="@dimen/timer_size"
+            android:layout_height="@dimen/timer_size"
+            android:layout_gravity="center"
+            android:includeFontPadding="false"
+            android:textAlignment="center"
+            app:autoSizeMaxTextSize="@dimen/auto_size_max"
+            app:autoSizeMinTextSize="@dimen/auto_size_min"
+            app:autoSizeStepGranularity="@dimen/auto_size_granularity"
+            app:autoSizeTextType="uniform"
+            tools:text="01"
+            tools:textColor="@color/colorFocus" />
+
+        <TextView
+            android:id="@+id/minutesText"
+            android:layout_width="@dimen/timer_size"
+            android:layout_height="@dimen/timer_size"
+            android:includeFontPadding="false"
+            android:textAlignment="center"
+            app:autoSizeMaxTextSize="@dimen/auto_size_max"
+            app:autoSizeMinTextSize="@dimen/auto_size_min"
+            app:autoSizeStepGranularity="@dimen/auto_size_granularity"
+            app:autoSizeTextType="uniform"
+            tools:text="59"
+            tools:textColor="@color/colorFocus" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/large_vertical_margin"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/optionsButton"
+            android:layout_width="@dimen/button_default_size"
+            android:layout_height="@dimen/button_default_size"
+            android:layout_gravity="start|center"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/options_description"
+            android:src="@drawable/ic_options" />
+
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="@dimen/button_play_width"
+            android:layout_height="@dimen/button_play_height"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/small_horizontal_margin"
+            android:background="@drawable/bg_play_button"
+            android:contentDescription="@string/options_description"
+            android:src="@drawable/ic_play" />
+
+        <ImageButton
+            android:id="@+id/nextButton"
+            android:layout_width="@dimen/button_default_size"
+            android:layout_height="@dimen/button_default_size"
+            android:layout_gravity="end|center"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/options_description"
+            android:src="@drawable/ic_next" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

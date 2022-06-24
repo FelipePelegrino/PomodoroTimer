@@ -1,8 +1,10 @@
 package com.gmail.devpelegrino.ui
 
 import android.content.res.Configuration
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gmail.devpelegrino.R
@@ -19,11 +21,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<ConstraintLayout>(R.id.constraintRoot).setOnClickListener {
+        findViewById<ConstraintLayout>(R.id.rootConstraint).setOnClickListener {
             changeAppTheme()
         }
 
-        itemPomodoroState = findViewById(R.id.item_pomodoro_state)
+//        findViewById<ImageButton>(R.id.teste).run {
+//            val gradient = this.background.mutate() as GradientDrawable
+//            gradient.color = resources.getColorStateList(R.color.colorLongBreakTertiary, context.theme)
+//            this.setColorFilter(resources.getColor(R.color.white, context.theme))
+//        }
+
+        itemPomodoroState = findViewById(R.id.itemPomodoroState)
         setStates()
         teste()
     }
@@ -39,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun teste() {
-        itemPomodoroState.setStateType(longBreak)
+        itemPomodoroState.setStateType(focusState)
     }
 
     private fun setStates() {
