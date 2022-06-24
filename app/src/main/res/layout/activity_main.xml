@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@id/itemPomodoroState">
 
         <TextView
-            android:id="@+id/hourText"
+            android:id="@+id/minutesText"
             android:layout_width="@dimen/timer_size"
             android:layout_height="@dimen/timer_size"
             android:layout_gravity="center"
@@ -43,7 +43,7 @@
             tools:textColor="@color/colorFocus" />
 
         <TextView
-            android:id="@+id/minutesText"
+            android:id="@+id/secondsText"
             android:layout_width="@dimen/timer_size"
             android:layout_height="@dimen/timer_size"
             android:includeFontPadding="false"

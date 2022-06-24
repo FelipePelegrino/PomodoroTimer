@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Item Stage -->
-    <dimen name="item_stage_height">46dp</dimen>
-    <dimen name="item_stroke_width">2dp</dimen>
-
     <!-- Margin -->
     <dimen name="large_margin">40dp</dimen>
     <dimen name="small_vertical_margin">6dp</dimen>
@@ -22,6 +18,8 @@
     <dimen name="button_play_height">96dp</dimen>
     <dimen name="button_play_width">128dp</dimen>
     <dimen name="timer_size">200dp</dimen>
+    <dimen name="item_stage_height">46dp</dimen>
+    <dimen name="item_stroke_width">2dp</dimen>
 
     <!-- Text -->
     <dimen name="text_stage">24sp</dimen>
