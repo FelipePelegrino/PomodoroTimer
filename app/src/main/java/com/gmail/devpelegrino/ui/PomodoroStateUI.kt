@@ -1,9 +1,9 @@
-package com.gmail.devpelegrino.util
+package com.gmail.devpelegrino.ui
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 
-class PomodoroState(
+class PomodoroStateUI(
     val name: String,
     @ColorInt val primaryColor: Int,
     @ColorInt val secondaryColor: Int,

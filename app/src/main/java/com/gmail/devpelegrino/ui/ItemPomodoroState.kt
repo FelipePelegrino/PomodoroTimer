@@ -8,7 +8,6 @@ import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.databinding.ItemPomodoroStateBinding
-import com.gmail.devpelegrino.util.PomodoroState
 
 class ItemPomodoroState @JvmOverloads constructor(
     context: Context,
@@ -33,7 +32,7 @@ class ItemPomodoroState @JvmOverloads constructor(
         setLayout(attrs)
     }
 
-    fun setStateType(type: PomodoroState) {
+    fun setStateType(type: PomodoroStateUI) {
         strokeColor = type.primaryColor
         backgroundColor = type.secondaryColor
         iconSrc = type.iconSrc

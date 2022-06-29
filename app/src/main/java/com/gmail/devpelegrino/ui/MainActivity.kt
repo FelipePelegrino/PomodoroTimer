@@ -1,25 +1,19 @@
 package com.gmail.devpelegrino.ui
 
-import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.databinding.ActivityMainBinding
+import com.gmail.devpelegrino.enum.PomodoroState
 import com.gmail.devpelegrino.util.Constants
-import com.gmail.devpelegrino.util.PomodoroState
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var itemPomodoroState: ItemPomodoroState
-    private lateinit var focusState: PomodoroState
-    private lateinit var shortBreak: PomodoroState
-    private lateinit var longBreak: PomodoroState
+    private lateinit var focusState: PomodoroStateUI
+    private lateinit var shortBreak: PomodoroStateUI
+    private lateinit var longBreak: PomodoroStateUI
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
 
@@ -30,31 +24,7 @@ class MainActivity : AppCompatActivity() {
         setupMainActivity()
         setStates()
         setObservables()
-        teste()
-    }
-
-    private fun setStates() {
-        focusState = PomodoroState(
-            name = getString(R.string.focus_name),
-            primaryColor = resources.getColor(R.color.colorFocus, applicationContext.theme),
-            secondaryColor = resources.getColor(R.color.colorFocusSecondary, applicationContext.theme),
-            tertiaryColor = resources.getColor(R.color.colorFocusTertiary, applicationContext.theme),
-            iconSrc = resources.getDrawable(R.drawable.ic_focus, applicationContext.theme)
-        )
-        shortBreak = PomodoroState(
-            name = getString(R.string.short_break_name),
-            primaryColor = resources.getColor(R.color.colorShortBreak, applicationContext.theme),
-            secondaryColor = resources.getColor(R.color.colorShortBreakSecondary, applicationContext.theme),
-            tertiaryColor = resources.getColor(R.color.colorShortBreakTertiary, applicationContext.theme),
-            iconSrc = resources.getDrawable(R.drawable.ic_coffee, applicationContext.theme)
-        )
-        longBreak = PomodoroState(
-            name = getString(R.string.long_break_name),
-            primaryColor = resources.getColor(R.color.colorLongBreak, applicationContext.theme),
-            secondaryColor = resources.getColor(R.color.colorLongBreakSecondary, applicationContext.theme),
-            tertiaryColor = resources.getColor(R.color.colorLongBreakTertiary, applicationContext.theme),
-            iconSrc = resources.getDrawable(R.drawable.ic_coffee, applicationContext.theme)
-        )
+        setListeners()
     }
 
     private fun setupMainActivity() {
@@ -63,29 +33,139 @@ class MainActivity : AppCompatActivity() {
             MainViewModel.MainViewModelFactory(application)
         )[MainViewModel::class.java]
         lifecycle.addObserver(viewModel)
-        itemPomodoroState = findViewById(R.id.itemPomodoroState)
     }
 
     private fun setObservables() {
         viewModel.run {
-            this.countDownMinutes.observe(this@MainActivity, Observer {
+            this.countDownMinutes.observe(this@MainActivity) {
                 binding.minutesText.text = addZeroLeftToString(it)
-            })
-            this.countDownSeconds.observe(this@MainActivity, Observer {
+            }
+            this.countDownSeconds.observe(this@MainActivity) {
                 binding.secondsText.text = addZeroLeftToString(it)
-            })
+            }
+            this.setStartIcon.observe(this@MainActivity) {
+                if (it) {
+                    binding.playButton.setImageDrawable(
+                        resources.getDrawable(
+                            R.drawable.ic_play,
+                            applicationContext.theme
+                        )
+                    )
+                } else {
+                    binding.playButton.setImageDrawable(
+                        resources.getDrawable(
+                            R.drawable.ic_pause,
+                            applicationContext.theme
+                        )
+                    )
+                }
+            }
+            this.pomodoroState.observe(this@MainActivity) { updateUI(it) }
+        }
+    }
+
+    private fun setListeners() {
+        binding.settingsButton.setOnClickListener { openSettings() }
+        binding.playButton.setOnClickListener { handlePlayButton() }
+        binding.nextButton.setOnClickListener { actionNextState() }
+    }
+
+    private fun openSettings() {
+        //TODO: possivelmente será criado uma popUp para settings
+    }
+
+    private fun handlePlayButton() {
+        viewModel.handlePlayResume()
+    }
+
+    private fun actionNextState() {
+        viewModel.goNextState()
+    }
+
+    private fun updateUI(state: PomodoroState) {
+        when (state) {
+            PomodoroState.SHORT_BREAK -> {
+                binding.itemPomodoroState.setStateType(shortBreak)
+                updateColors(shortBreak)
+            }
+            PomodoroState.LONG_BREAK -> {
+                binding.itemPomodoroState.setStateType(longBreak)
+                updateColors(longBreak)
+            }
+            else -> {
+                binding.itemPomodoroState.setStateType(focusState)
+                updateColors(focusState)
+            }
+        }
+    }
+
+    private fun updateColors(stateUi: PomodoroStateUI) = binding.run {
+        this.secondsText.setTextColor(stateUi.primaryColor)
+        this.minutesText.setTextColor(stateUi.primaryColor)
+        this.settingsButton.run {
+            val gradient = this.background.mutate() as GradientDrawable
+            gradient.setTint(stateUi.secondaryColor)
+            this.setColorFilter(stateUi.primaryColor)
+        }
+        this.playButton.run {
+            val gradient = this.background.mutate() as GradientDrawable
+            gradient.setTint(stateUi.tertiaryColor)
+            this.setColorFilter(stateUi.primaryColor)
+        }
+        this.nextButton.run {
+            val gradient = this.background.mutate() as GradientDrawable
+            gradient.setTint(stateUi.secondaryColor)
+            this.setColorFilter(stateUi.primaryColor)
         }
     }
 
     private fun addZeroLeftToString(number: Int): String {
-        return if(number < Constants.TEN_SECONDS) {
+        return if (number < Constants.TEN_SECONDS) {
             "0$number"
         } else {
             number.toString()
         }
     }
 
-    private fun teste() {
-        itemPomodoroState.setStateType(focusState)
+    private fun setStates() {
+        focusState = PomodoroStateUI(
+            name = getString(R.string.focus_name),
+            primaryColor = resources.getColor(R.color.colorFocus, applicationContext.theme),
+            secondaryColor = resources.getColor(
+                R.color.colorFocusSecondary,
+                applicationContext.theme
+            ),
+            tertiaryColor = resources.getColor(
+                R.color.colorFocusTertiary,
+                applicationContext.theme
+            ),
+            iconSrc = resources.getDrawable(R.drawable.ic_focus, applicationContext.theme)
+        )
+        shortBreak = PomodoroStateUI(
+            name = getString(R.string.short_break_name),
+            primaryColor = resources.getColor(R.color.colorShortBreak, applicationContext.theme),
+            secondaryColor = resources.getColor(
+                R.color.colorShortBreakSecondary,
+                applicationContext.theme
+            ),
+            tertiaryColor = resources.getColor(
+                R.color.colorShortBreakTertiary,
+                applicationContext.theme
+            ),
+            iconSrc = resources.getDrawable(R.drawable.ic_coffee, applicationContext.theme)
+        )
+        longBreak = PomodoroStateUI(
+            name = getString(R.string.long_break_name),
+            primaryColor = resources.getColor(R.color.colorLongBreak, applicationContext.theme),
+            secondaryColor = resources.getColor(
+                R.color.colorLongBreakSecondary,
+                applicationContext.theme
+            ),
+            tertiaryColor = resources.getColor(
+                R.color.colorLongBreakTertiary,
+                applicationContext.theme
+            ),
+            iconSrc = resources.getDrawable(R.drawable.ic_coffee, applicationContext.theme)
+        )
     }
 }
