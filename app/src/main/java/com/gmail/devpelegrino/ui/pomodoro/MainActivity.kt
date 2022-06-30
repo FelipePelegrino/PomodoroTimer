@@ -1,12 +1,15 @@
-package com.gmail.devpelegrino.ui
+package com.gmail.devpelegrino.ui.pomodoro
 
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.databinding.ActivityMainBinding
 import com.gmail.devpelegrino.enum.PomodoroState
+import com.gmail.devpelegrino.ui.PomodoroStateUI
+import com.gmail.devpelegrino.ui.settings.SettingsDialogFragment
 import com.gmail.devpelegrino.util.Constants
 
 class MainActivity : AppCompatActivity() {
@@ -71,7 +74,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openSettings() {
-        //TODO: possivelmente será criado uma popUp para settings
+        val fragmentManager = supportFragmentManager
+        val newFragment = SettingsDialogFragment()
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        transaction
+            .add(android.R.id.content, newFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun handlePlayButton() {

@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.pomodoro.MainActivity">
 
-    <com.gmail.devpelegrino.ui.ItemPomodoroState
+    <com.gmail.devpelegrino.ui.pomodoro.ItemPomodoroState
         android:id="@+id/itemPomodoroState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/small_horizontal_margin"
             android:background="@drawable/bg_play_button"
-            android:contentDescription="@string/settings_description"
+            android:contentDescription="@string/play_description"
             android:src="@drawable/ic_play" />
 
         <ImageButton
@@ -92,7 +92,7 @@
             android:layout_height="@dimen/button_default_size"
             android:layout_gravity="end|center"
             android:background="@drawable/bg_button"
-            android:contentDescription="@string/settings_description"
+            android:contentDescription="@string/next_description"
             android:src="@drawable/ic_next" />
     </LinearLayout>
 
