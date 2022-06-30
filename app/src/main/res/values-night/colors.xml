@@ -2,6 +2,8 @@
 <resources>
     <color name="colorBackground">#99000000</color>
     <color name="colorText">#FBF2F3</color>
+    <color name="colorSettingsDetails">#B93737</color>
+    <color name="colorSettingsOnDetails">#474040</color>
 
     <color name="colorFocus">#FFF2F2</color>
     <color name="colorFocusSecondary">#300E0B</color>

@@ -1,7 +1,25 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">Pomodoro Timer</string>
+
+    <!-- Pomodoro Screen -->
     <string name="focus_name">Focus</string>
     <string name="short_break_name">Short Break</string>
     <string name="long_break_name">Long Break</string>
     <string name="settings_description">Settings</string>
+    <string name="play_description">Play</string>
+    <string name="next_description">Next</string>
+
+    <!-- Settings Modal -->
+    <string name="settings_title">Settings</string>
+    <string name="exit_description">Exit</string>
+    <string name="dark_mode_text">Dark mode</string>
+    <string name="focus_length_text">Focus length</string>
+    <string name="short_break_length">Short break length</string>
+    <string name="long_break_length">Long break length</string>
+    <string name="pomodoro_until_long_break">Pomodoro until long break</string>
+    <string name="auto_resume_timer">Auto resume timer</string>
+    <string name="notifications_text">Notifications</string>
+    <string name="sound_text">Sound</string>
+    <string name="english_text">English</string>
 </resources>

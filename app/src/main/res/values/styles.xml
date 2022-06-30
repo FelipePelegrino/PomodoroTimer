@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ModalTextDefault">
+        <item name="android:textSize">@dimen/modal_settings_default</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="ModalTextDefaultMargin" parent="ModalTextDefault">
+        <item name="android:layout_marginTop">@dimen/modal_large_vertical_margin</item>
+    </style>
+
+    <style name="ModalTextNumber" parent="ModalTextDefault">
+        <item name="android:layout_width">@dimen/modal_text_number_width</item>
+        <item name="android:layout_height">@dimen/modal_text_number_height</item>
+        <item name="android:background">@drawable/bg_settings_pickers</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

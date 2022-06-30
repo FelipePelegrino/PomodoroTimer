@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_horizontal_margin"
+        android:layout_marginVertical="@dimen/small_horizontal_margin">
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_title"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/modal_title"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/exitButton"
+            android:layout_width="@dimen/button_exit_size"
+            android:layout_height="@dimen/button_exit_size"
+            android:background="@color/colorBackground"
+            android:contentDescription="@string/exit_description"
+            android:src="@drawable/ic_x"
+            app:layout_constraintBottom_toBottomOf="@+id/titleText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
+
+        <TextView
+            android:id="@+id/focusText"
+            style="@style/ModalTextDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modal_margin_first_item"
+            android:text="@string/focus_length_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleText" />
+
+        <TextView
+            android:id="@+id/focusLength"
+            style="@style/ModalTextNumber"
+            app:layout_constraintTop_toTopOf="@id/focusText"
+            app:layout_constraintBottom_toBottomOf="@id/focusText"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="15"/>
+
+        <TextView
+            android:id="@+id/shortBreakText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/short_break_length"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/focusText" />
+
+        <TextView
+            android:id="@+id/shortBreakLength"
+            style="@style/ModalTextNumber"
+            app:layout_constraintTop_toTopOf="@id/shortBreakText"
+            app:layout_constraintBottom_toBottomOf="@id/shortBreakText"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="15"/>
+
+        <TextView
+            android:id="@+id/longBreakText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_break_length"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shortBreakText" />
+
+        <TextView
+            android:id="@+id/longBreakLength"
+            style="@style/ModalTextNumber"
+            app:layout_constraintTop_toTopOf="@id/longBreakText"
+            app:layout_constraintBottom_toBottomOf="@id/longBreakText"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="15"/>
+
+        <TextView
+            android:id="@+id/pomodoroUntilText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pomodoro_until_long_break"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/longBreakText" />
+
+        <TextView
+            android:id="@+id/pomodoroUntilLength"
+            style="@style/ModalTextNumber"
+            app:layout_constraintTop_toTopOf="@id/pomodoroUntilText"
+            app:layout_constraintBottom_toBottomOf="@id/pomodoroUntilText"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="15"/>
+
+        <TextView
+            android:id="@+id/autoResumeText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_resume_timer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pomodoroUntilText" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/autoResumeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/autoResumeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/autoResumeText" />
+
+        <TextView
+            android:id="@+id/notificationsText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/autoResumeText" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/notificationsSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/notificationsText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/notificationsText" />
+
+        <TextView
+            android:id="@+id/soundText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sound_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notificationsText" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/soundSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/soundText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/soundText" />
+
+        <TextView
+            android:id="@+id/darkModeText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dark_mode_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/soundText" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/darkModeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/darkModeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/darkModeText" />
+
+        <TextView
+            android:id="@+id/englishText"
+            style="@style/ModalTextDefaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/english_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/darkModeText" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/englishSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/englishText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/englishText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
