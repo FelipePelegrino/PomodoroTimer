@@ -111,7 +111,7 @@ class SettingsDialogFragment : DialogFragment() {
     }
 
     private fun close() {
-        dismiss()
+        requireActivity().onBackPressed()
     }
 
     private fun notificationsAction(isEnable: Boolean) {
