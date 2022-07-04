@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.databinding.ActivityMainBinding
 import com.gmail.devpelegrino.enum.PomodoroState
-import com.gmail.devpelegrino.ui.PomodoroStateUI
 import com.gmail.devpelegrino.ui.settings.SettingsDialogFragment
 import com.gmail.devpelegrino.util.Constants
 

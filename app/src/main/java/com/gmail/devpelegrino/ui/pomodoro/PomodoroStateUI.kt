@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.ui
+package com.gmail.devpelegrino.ui.pomodoro
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt

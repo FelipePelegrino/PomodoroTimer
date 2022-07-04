@@ -8,7 +8,6 @@ import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.databinding.ItemPomodoroStateBinding
-import com.gmail.devpelegrino.ui.PomodoroStateUI
 
 class ItemPomodoroState @JvmOverloads constructor(
     context: Context,
