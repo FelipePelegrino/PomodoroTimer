@@ -3,8 +3,8 @@ package com.gmail.devpelegrino.ui.pomodoro
 import android.app.Application
 import android.os.CountDownTimer
 import androidx.lifecycle.*
-import com.gmail.devpelegrino.data.SettingsFake
-import com.gmail.devpelegrino.data.SettingsModel
+import com.gmail.devpelegrino.data.model.SettingsFake
+import com.gmail.devpelegrino.data.model.SettingsModel
 import com.gmail.devpelegrino.enum.PomodoroState
 import com.gmail.devpelegrino.enum.TimerState
 import com.gmail.devpelegrino.util.*

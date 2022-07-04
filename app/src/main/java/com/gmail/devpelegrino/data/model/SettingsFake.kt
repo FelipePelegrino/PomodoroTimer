@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.data
+package com.gmail.devpelegrino.data.model
 
 class SettingsFake {
     companion object {
