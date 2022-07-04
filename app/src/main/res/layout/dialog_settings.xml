@@ -97,7 +97,7 @@
             app:layout_constraintTop_toBottomOf="@id/longBreakText" />
 
         <TextView
-            android:id="@+id/pomodoroUntilLength"
+            android:id="@+id/pomodoroUntilLongBreakLength"
             style="@style/ModalTextNumber"
             app:layout_constraintTop_toTopOf="@id/pomodoroUntilText"
             app:layout_constraintBottom_toBottomOf="@id/pomodoroUntilText"

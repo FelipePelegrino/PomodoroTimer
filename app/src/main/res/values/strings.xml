@@ -22,4 +22,6 @@
     <string name="notifications_text">Notifications</string>
     <string name="sound_text">Sound</string>
     <string name="english_text">English</string>
+    <string name="dialog_number_positive_button">Set</string>
+    <string name="dialog_number_negative_button">Cancel</string>
 </resources>
