@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.ui.pomodoro
+package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -6,10 +6,12 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
+import com.gmail.devpelegrino.pomodorotimer.data.database.AppDatabase
+import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsDataSource
 import com.gmail.devpelegrino.databinding.ActivityMainBinding
-import com.gmail.devpelegrino.enum.PomodoroState
-import com.gmail.devpelegrino.ui.settings.SettingsDialogFragment
-import com.gmail.devpelegrino.util.Constants
+import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
+import com.gmail.devpelegrino.pomodorotimer.ui.settings.SettingsDialogFragment
+import com.gmail.devpelegrino.pomodorotimer.util.Constants
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,19 +27,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupMainActivity()
         setStates()
-        setObservables()
+        setObservers()
         setListeners()
     }
 
     private fun setupMainActivity() {
+        val database = AppDatabase.getDatabase(application.applicationContext)
         viewModel = ViewModelProvider(
             this,
-            MainViewModel.MainViewModelFactory(application)
+            MainViewModel.MainViewModelFactory(
+                application = application,
+                settingsRepository = SettingsDataSource(database.settingsDao())
+            ),
         )[MainViewModel::class.java]
         lifecycle.addObserver(viewModel)
     }
 
-    private fun setObservables() {
+    private fun setObservers() {
         viewModel.run {
             this.countDownMinutes.observe(this@MainActivity) {
                 binding.minutesText.text = addZeroLeftToString(it)

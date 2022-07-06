@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.util
+package com.gmail.devpelegrino.pomodorotimer.util
 
 fun Long.getSecondsByMillis(): Int {
     return (this / Constants.MILLISECONDS_TO_ONE_SECOND_LONG).toInt()

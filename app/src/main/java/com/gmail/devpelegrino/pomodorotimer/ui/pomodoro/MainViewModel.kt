@@ -1,20 +1,26 @@
-package com.gmail.devpelegrino.ui.pomodoro
+package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 
 import android.app.Application
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.*
-import com.gmail.devpelegrino.data.model.SettingsFake
-import com.gmail.devpelegrino.data.model.SettingsModel
-import com.gmail.devpelegrino.enum.PomodoroState
-import com.gmail.devpelegrino.enum.TimerState
-import com.gmail.devpelegrino.util.*
+import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
+import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
+import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
+import com.gmail.devpelegrino.pomodorotimer.enums.TimerState
+import com.gmail.devpelegrino.pomodorotimer.util.*
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 
-class MainViewModel(application: Application) : AndroidViewModel(application),
+class MainViewModel(
+    application: Application,
+    private val settingsRepository: SettingsRepository
+) : AndroidViewModel(application),
     DefaultLifecycleObserver {
 
     // Settings
-    private var settingsModel: SettingsModel = SettingsFake.getSettingsFake()
+    private lateinit var settingsModel: SettingsModel
     private var pomodoroStateHandle = PomodoroStateHandle()
 
     // CountDownVariables
@@ -78,10 +84,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     }
 
     private fun loadSettings() {
-        pomodoroStateHandle.setFocusUntilLong(settingsModel.focusUntilLongBreak)
-        _pomodoroState.value = pomodoroStateHandle.getNextState()
-        setTimeInUiAfterNextState()
-        //TODO: carregara as configurações locais de um SQLite ou SharedPreferences
+        viewModelScope.launch {
+            try {
+                settingsModel =  settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
+            } catch (ex: NullPointerException) {
+                insertDefaultSettings()
+            }
+            pomodoroStateHandle.setFocusUntilLong(settingsModel.focusUntilLongBreak)
+            _pomodoroState.value = pomodoroStateHandle.getNextState()
+            setTimeInUiAfterNextState()
+        }
     }
 
     private fun setCountDownTimer(timeSeconds: Int) {
@@ -140,14 +152,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
         }
     }
 
+    private fun insertDefaultSettings() {
+        viewModelScope.launch {
+            settingsModel = SettingsModel(
+                focusMinutes = 25,
+                shortBreakMinutes = 5,
+                longBreakMinutes = 10,
+                focusUntilLongBreak = 4,
+                isDarkMode = false,
+                isAutoResumeTimer = false,
+                isSound = false, //TODO: true
+                isNotification = false, //TODO: true
+                isEnglish = false
+            )
+            settingsRepository.createSettings(settingsModel)
+        }
+    }
+
     class MainViewModelFactory constructor(
-        private val application: Application
+        private val application: Application,
+        private val settingsRepository: SettingsRepository
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             with(modelClass) {
                 when {
-                    isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application)
+                    isAssignableFrom(MainViewModel::class.java) -> MainViewModel(
+                        application,
+                        settingsRepository
+                    )
                     else -> throw IllegalArgumentException("Class not found")
                 }
             } as T

@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.ui.pomodoro
+package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 
 import android.content.Context
 import android.graphics.drawable.Drawable

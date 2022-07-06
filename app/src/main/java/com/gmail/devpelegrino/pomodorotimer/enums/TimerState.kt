@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.enum
+package com.gmail.devpelegrino.pomodorotimer.enums
 
 enum class TimerState {
     RUNNING,

@@ -1,12 +1,21 @@
-package com.gmail.devpelegrino.ui.settings
+package com.gmail.devpelegrino.pomodorotimer.ui.settings
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
+import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
+import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
+import com.gmail.devpelegrino.pomodorotimer.util.Constants
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class SettingsDialogViewModel(application: Application) : AndroidViewModel(application),
+class SettingsDialogViewModel(
+    application: Application,
+    private val settingsRepository: SettingsRepository
+) : AndroidViewModel(application),
     DefaultLifecycleObserver {
+
+    // Data
+    private lateinit var settingsModel: SettingsModel
 
     // Settings
     private var _focusLength = MutableLiveData<Int>().apply { value = 0 }
@@ -55,7 +64,7 @@ class SettingsDialogViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun closeSettingsDialog() {
-        //TODO: save all data
+        putSettingsModel()
         _isCloseDialog.value = true
     }
 
@@ -96,18 +105,48 @@ class SettingsDialogViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun loadSettings() {
-        //TODO: load all data
-        Log.i("teste", "loadSettings: teste")
+        viewModelScope.launch {
+            settingsModel = settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
+            getSettingsModel()
+        }
+    }
+
+    private fun getSettingsModel() = settingsModel.run {
+        _focusLength.value = focusMinutes
+        _shortBreakLength.value = shortBreakMinutes
+        _longBreakLength.value = longBreakMinutes
+        _untilLongBreak.value = focusUntilLongBreak
+        _isAutoResume.value = isAutoResumeTimer
+        _isNotification.value = isNotification
+        _isSound.value = isSound
+        _isDarkMode.value = isDarkMode
+        _isEnglish.value = isEnglish
+    }
+
+    private fun putSettingsModel() = settingsModel.run {
+        _focusLength.value?.let { focusMinutes = it }
+        _shortBreakLength.value?.let { shortBreakMinutes = it }
+        _longBreakLength.value?.let { longBreakMinutes = it }
+        _untilLongBreak.value?.let { focusUntilLongBreak = it }
+        _isAutoResume.value?.let { isAutoResumeTimer = it }
+        _isNotification.value?.let { isNotification = it }
+        _isSound.value?.let { isSound = it }
+        _isDarkMode.value?.let { isDarkMode = it }
+        _isEnglish.value?.let { isEnglish = it }
     }
 
     class SettingsDialogViewModelFactory constructor(
-        private val application: Application
+        private val application: Application,
+        private val settingsRepository: SettingsRepository
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             with(modelClass) {
                 when {
-                    isAssignableFrom(SettingsDialogViewModel::class.java) -> SettingsDialogViewModel(application)
+                    isAssignableFrom(SettingsDialogViewModel::class.java) -> SettingsDialogViewModel(
+                        application,
+                        settingsRepository
+                    )
                     else -> throw IllegalArgumentException("Class not found")
                 }
             } as T

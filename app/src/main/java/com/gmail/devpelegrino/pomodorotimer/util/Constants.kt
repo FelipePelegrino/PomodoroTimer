@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.util
+package com.gmail.devpelegrino.pomodorotimer.util
 
 object Constants {
 
@@ -13,4 +13,10 @@ object Constants {
     const val MAX_SHORT_BREAK_MINUTES = 30
     const val MAX_LONG_BREAK_MINUTES = 60
     const val MAX_UNTIL_LONG_BREAK = 10
+
+    // Room
+    const val SETTINGS_TABLE_NAME = "settings"
+    const val APP_DATABASE_VERSION = 1
+    const val APP_DATABASE_NAME = "pomodoro_database"
+    const val UNIQUE_ROW_DATABASE = 0L
 }

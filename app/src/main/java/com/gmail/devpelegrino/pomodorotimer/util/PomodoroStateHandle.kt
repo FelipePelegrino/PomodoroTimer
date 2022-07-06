@@ -1,6 +1,6 @@
-package com.gmail.devpelegrino.util
+package com.gmail.devpelegrino.pomodorotimer.util
 
-import com.gmail.devpelegrino.enum.PomodoroState
+import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
 
 class PomodoroStateHandle {
 

@@ -1,4 +1,4 @@
-package com.gmail.devpelegrino.ui.settings
+package com.gmail.devpelegrino.pomodorotimer.ui.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -12,8 +12,10 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
+import com.gmail.devpelegrino.pomodorotimer.data.database.AppDatabase
+import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsDataSource
 import com.gmail.devpelegrino.databinding.DialogSettingsBinding
-import com.gmail.devpelegrino.util.Constants
+import com.gmail.devpelegrino.pomodorotimer.util.Constants
 
 class SettingsDialogFragment : DialogFragment() {
 
@@ -28,7 +30,7 @@ class SettingsDialogFragment : DialogFragment() {
         binding = DialogSettingsBinding.inflate(inflater, container, false)
         setupSettingsDialog()
         setListeners()
-        setObservables()
+        setObservers()
         return binding.root
     }
 
@@ -71,7 +73,7 @@ class SettingsDialogFragment : DialogFragment() {
         }
     }
 
-    private fun setObservables() = viewModel.run {
+    private fun setObservers() = viewModel.run {
         isCloseDialog.observe(viewLifecycleOwner) { isClose ->
             if(isClose) {
                 close()
@@ -132,9 +134,13 @@ class SettingsDialogFragment : DialogFragment() {
 
     private fun setupSettingsDialog() {
         activity?.application?.let { application ->
+            val database = AppDatabase.getDatabase(application.applicationContext)
             viewModel = ViewModelProvider(
                 this,
-                SettingsDialogViewModel.SettingsDialogViewModelFactory(application)
+                SettingsDialogViewModel.SettingsDialogViewModelFactory(
+                    application = application,
+                    settingsRepository = SettingsDataSource(database.settingsDao())
+                )
             )[SettingsDialogViewModel::class.java]
             lifecycle.addObserver(viewModel)
         }
