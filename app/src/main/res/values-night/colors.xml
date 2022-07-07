@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorBackground">#99000000</color>
+    <color name="colorBackgroundDialogFragment">#201F1F</color>
     <color name="colorText">#FBF2F3</color>
     <color name="colorSettingsDetails">#B93737</color>
     <color name="colorSettingsOnDetails">#474040</color>

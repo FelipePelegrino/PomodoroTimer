@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
 import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
+import com.gmail.devpelegrino.pomodorotimer.util.SharedPreferencesUtils
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -18,90 +19,103 @@ class SettingsDialogViewModel(
     private lateinit var settingsModel: SettingsModel
 
     // Settings
-    private var _focusLength = MutableLiveData<Int>().apply { value = 0 }
+    private var _focusLength = MutableLiveData<Int>()
     val focusLength: LiveData<Int>
         get() = _focusLength
 
-    private var _shortBreakLength = MutableLiveData<Int>().apply { value = 0 }
+    private var _shortBreakLength = MutableLiveData<Int>()
     val shortBreakLength: LiveData<Int>
         get() = _shortBreakLength
 
-    private var _longBreakLength = MutableLiveData<Int>().apply { value = 0 }
+    private var _longBreakLength = MutableLiveData<Int>()
     val longBreakLength: LiveData<Int>
         get() = _longBreakLength
 
-    private var _untilLongBreak = MutableLiveData<Int>().apply { value = 0 }
+    private var _untilLongBreak = MutableLiveData<Int>()
     val untilLongBreak: LiveData<Int>
         get() = _untilLongBreak
 
-    private var _isAutoResume = MutableLiveData<Boolean>().apply { value = false }
+    private var _isAutoResume = MutableLiveData<Boolean>()
     val isAutoResume: LiveData<Boolean>
         get() = _isAutoResume
 
-    private var _isNotification = MutableLiveData<Boolean>().apply { value = false }
+    private var _isNotification = MutableLiveData<Boolean>()
     val isNotification: LiveData<Boolean>
         get() = _isNotification
 
-    private var _isSound = MutableLiveData<Boolean>().apply { value = false }
+    private var _isSound = MutableLiveData<Boolean>()
     val isSound: LiveData<Boolean>
         get() = _isSound
 
-    private var _isDarkMode = MutableLiveData<Boolean>().apply { value = false }
+    private var _isDarkMode = MutableLiveData<Boolean>()
     val isDarkMode: LiveData<Boolean>
         get() = _isDarkMode
 
-    private var _isEnglish = MutableLiveData<Boolean>().apply { value = false }
+    private var _isEnglish = MutableLiveData<Boolean>()
     val isEnglish: LiveData<Boolean>
         get() = _isEnglish
 
-    private var _isCloseDialog = MutableLiveData<Boolean>().apply { value = false }
+    private var _isCloseDialog = MutableLiveData<Boolean>()
     val isCloseDialog: LiveData<Boolean>
         get() = _isCloseDialog
 
-    override fun onStart(owner: LifecycleOwner) {
-        super.onStart(owner)
+    // UI Messages
+//    private var _error = MutableLiveData<String>()
+//    val error: LiveData<String>
+//        get() = _error
+
+//    override fun onStart(owner: LifecycleOwner) {
+//        super.onStart(owner)
+//        loadSettings()
+//    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        loadSharedPreferences()
         loadSettings()
     }
 
     fun closeSettingsDialog() {
-        putSettingsModel()
+        saveSettings()
         _isCloseDialog.value = true
     }
 
     fun setFocusLength(length: Int) {
-
+        _focusLength.value = length
     }
 
     fun setShortBreakLength(length: Int) {
-
+        _shortBreakLength.value = length
     }
 
     fun setLongBreakLength(length: Int) {
-
+        _longBreakLength.value = length
     }
 
     fun setUntilLongBreak(length: Int) {
-
+        _untilLongBreak.value = length
     }
 
     fun setAutoResume(isEnable: Boolean) {
-
+        _isAutoResume.value = isEnable
     }
 
     fun setNotifications(isEnable: Boolean) {
-
+        _isNotification.value = isEnable
     }
 
     fun setSound(isEnable: Boolean) {
-
+        _isSound.value = isEnable
     }
 
     fun setDarkMode(isEnable: Boolean) {
-
+        SharedPreferencesUtils.setDarkMode(getApplication<Application>().applicationContext, isEnable)
+        _isDarkMode.value = isEnable
     }
 
     fun setEnglish(isEnable: Boolean) {
-
+        SharedPreferencesUtils.setEnglish(getApplication<Application>().applicationContext, isEnable)
+        _isEnglish.value = isEnable
     }
 
     private fun loadSettings() {
@@ -109,6 +123,20 @@ class SettingsDialogViewModel(
             settingsModel = settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
             getSettingsModel()
         }
+    }
+
+    private fun saveSettings() {
+        if(isNeededSave()) {
+            putSettingsModel()
+            viewModelScope.launch {
+                settingsRepository.updateSettings(settingsModel)
+            }
+        }
+    }
+
+    private fun loadSharedPreferences() {
+        _isDarkMode.value = SharedPreferencesUtils.getDarkMode(getApplication<Application>().applicationContext)
+        _isEnglish.value = SharedPreferencesUtils.getEnglish(getApplication<Application>().applicationContext)
     }
 
     private fun getSettingsModel() = settingsModel.run {
@@ -119,8 +147,6 @@ class SettingsDialogViewModel(
         _isAutoResume.value = isAutoResumeTimer
         _isNotification.value = isNotification
         _isSound.value = isSound
-        _isDarkMode.value = isDarkMode
-        _isEnglish.value = isEnglish
     }
 
     private fun putSettingsModel() = settingsModel.run {
@@ -131,8 +157,16 @@ class SettingsDialogViewModel(
         _isAutoResume.value?.let { isAutoResumeTimer = it }
         _isNotification.value?.let { isNotification = it }
         _isSound.value?.let { isSound = it }
-        _isDarkMode.value?.let { isDarkMode = it }
-        _isEnglish.value?.let { isEnglish = it }
+    }
+
+    private fun isNeededSave(): Boolean = settingsModel.run {
+        return (_focusLength.value != focusMinutes ||
+                _shortBreakLength.value != shortBreakMinutes ||
+                _longBreakLength.value != longBreakMinutes ||
+                _untilLongBreak.value != focusUntilLongBreak ||
+                _isAutoResume.value != isAutoResumeTimer ||
+                _isNotification.value != isNotification ||
+                _isSound.value != isSound)
     }
 
     class SettingsDialogViewModelFactory constructor(

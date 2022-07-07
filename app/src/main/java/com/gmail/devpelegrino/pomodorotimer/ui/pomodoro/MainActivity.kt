@@ -12,6 +12,7 @@ import com.gmail.devpelegrino.databinding.ActivityMainBinding
 import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
 import com.gmail.devpelegrino.pomodorotimer.ui.settings.SettingsDialogFragment
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
+import com.gmail.devpelegrino.pomodorotimer.util.ThemeUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,6 +46,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.run {
+            this.isDarkMode.observe(this@MainActivity) {
+                ThemeUtils.changeAppTheme(it)
+            }
+            this.isEnglish.observe(this@MainActivity) {
+                //TODO: enabled/disabled english
+            }
             this.countDownMinutes.observe(this@MainActivity) {
                 binding.minutesText.text = addZeroLeftToString(it)
             }

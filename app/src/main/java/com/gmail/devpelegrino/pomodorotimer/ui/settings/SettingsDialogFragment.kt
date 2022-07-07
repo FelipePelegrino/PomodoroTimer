@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.NumberPicker
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
@@ -16,6 +17,7 @@ import com.gmail.devpelegrino.pomodorotimer.data.database.AppDatabase
 import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsDataSource
 import com.gmail.devpelegrino.databinding.DialogSettingsBinding
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
+import com.gmail.devpelegrino.pomodorotimer.util.ThemeUtils
 
 class SettingsDialogFragment : DialogFragment() {
 
@@ -28,7 +30,8 @@ class SettingsDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DialogSettingsBinding.inflate(inflater, container, false)
-        setupSettingsDialog()
+        setUpSettingsDialog()
+        setOnBackPressed()
         setListeners()
         setObservers()
         return binding.root
@@ -45,16 +48,16 @@ class SettingsDialogFragment : DialogFragment() {
             viewModel.closeSettingsDialog()
         }
         focusLength.setOnClickListener {
-            openDialogNumberPicker(Constants.MAX_FOCUS_MINUTES, focusLength)
+            openDialogNumberPicker(focusLength)
         }
         shortBreakLength.setOnClickListener {
-            openDialogNumberPicker(Constants.MAX_SHORT_BREAK_MINUTES, shortBreakLength)
+            openDialogNumberPicker(shortBreakLength)
         }
         longBreakLength.setOnClickListener {
-            openDialogNumberPicker(Constants.MAX_LONG_BREAK_MINUTES, longBreakLength)
+            openDialogNumberPicker(longBreakLength)
         }
         pomodoroUntilLongBreakLength.setOnClickListener {
-            openDialogNumberPicker(Constants.MAX_UNTIL_LONG_BREAK, pomodoroUntilLongBreakLength)
+            openDialogNumberPicker(pomodoroUntilLongBreakLength)
         }
         autoResumeSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setAutoResume(isChecked)
@@ -75,7 +78,7 @@ class SettingsDialogFragment : DialogFragment() {
 
     private fun setObservers() = viewModel.run {
         isCloseDialog.observe(viewLifecycleOwner) { isClose ->
-            if(isClose) {
+            if (isClose) {
                 close()
             }
         }
@@ -96,11 +99,9 @@ class SettingsDialogFragment : DialogFragment() {
         }
         isNotification.observe(viewLifecycleOwner) {
             binding.notificationsSwitch.isChecked = it
-            notificationsAction(it)
         }
         isSound.observe(viewLifecycleOwner) {
             binding.soundSwitch.isChecked = it
-            soundAction(it)
         }
         isDarkMode.observe(viewLifecycleOwner) {
             binding.darkModeSwitch.isChecked = it
@@ -116,23 +117,15 @@ class SettingsDialogFragment : DialogFragment() {
         requireActivity().onBackPressed()
     }
 
-    private fun notificationsAction(isEnable: Boolean) {
-        //TODO: Enabled/Disabled notifications
-    }
-
-    private fun soundAction(isEnable: Boolean) {
-        //TODO: Enabled/Disabled sounds
-    }
-
     private fun darkModeAction(isEnable: Boolean) {
-        //TODO: Enabled/Disabled darkMode
+        ThemeUtils.changeAppTheme(isEnable)
     }
 
     private fun englishAction(isEnable: Boolean) {
         //TODO: Enabled/Disabled english
     }
 
-    private fun setupSettingsDialog() {
+    private fun setUpSettingsDialog() {
         activity?.application?.let { application ->
             val database = AppDatabase.getDatabase(application.applicationContext)
             viewModel = ViewModelProvider(
@@ -146,18 +139,29 @@ class SettingsDialogFragment : DialogFragment() {
         }
     }
 
-    private fun openDialogNumberPicker(maxValueNumber: Int, textView: TextView) {
+    private fun setOnBackPressed() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.closeSettingsDialog()
+                    if (isEnabled) {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+            )
+    }
+
+    private fun openDialogNumberPicker(textView: TextView) {
         val alert = AlertDialog.Builder(context)
         val dialogView = layoutInflater.inflate(R.layout.dialog_number_picker, null)
         val numberPicker = dialogView.findViewById<NumberPicker>(R.id.dialogNumberPicker)
 
-        //TODO: config dialog numberpicker
-        alert.setTitle("Title")
-        alert.setMessage("Message")
+        alert.setTitle(getString(R.string.dialog_number_title))
         alert.setView(dialogView)
         numberPicker.minValue = 1
-        numberPicker.maxValue = maxValueNumber
-        numberPicker.wrapSelectorWheel = false
         alert.setPositiveButton(getString(R.string.dialog_number_positive_button)) { _, _ ->
             setNumberPickInField(
                 text = numberPicker.value.toString(),
@@ -165,11 +169,47 @@ class SettingsDialogFragment : DialogFragment() {
             )
         }
         alert.setNegativeButton(getString(R.string.dialog_number_negative_button)) { _, _ -> }
+
+        when (textView) {
+            binding.focusLength -> {
+                alert.setMessage(getString(R.string.dialog_number_message_focus))
+                numberPicker.maxValue = Constants.MAX_FOCUS_MINUTES
+                numberPicker.value = binding.focusLength.text.toString().toInt()
+            }
+            binding.shortBreakLength -> {
+                alert.setMessage(getString(R.string.dialog_number_message_short_break))
+                numberPicker.maxValue = Constants.MAX_SHORT_BREAK_MINUTES
+                numberPicker.value = binding.shortBreakLength.text.toString().toInt()
+            }
+            binding.longBreakLength -> {
+                alert.setMessage(getString(R.string.dialog_number_message_long_break))
+                numberPicker.maxValue = Constants.MAX_LONG_BREAK_MINUTES
+                numberPicker.value = binding.longBreakLength.text.toString().toInt()
+            }
+            binding.pomodoroUntilLongBreakLength -> {
+                alert.setMessage(getString(R.string.dialog_number_message_until_long))
+                numberPicker.maxValue = Constants.MAX_UNTIL_LONG_BREAK
+                numberPicker.value = binding.pomodoroUntilLongBreakLength.text.toString().toInt()
+            }
+        }
         alert.create().show()
     }
 
     private fun setNumberPickInField(text: String, textView: TextView) {
-        //TODO: update sqlRoom
         textView.text = text
+        when (textView) {
+            binding.focusLength -> {
+                viewModel.setFocusLength(text.toInt())
+            }
+            binding.shortBreakLength -> {
+                viewModel.setShortBreakLength(text.toInt())
+            }
+            binding.longBreakLength -> {
+                viewModel.setLongBreakLength(text.toInt())
+            }
+            binding.pomodoroUntilLongBreakLength -> {
+                viewModel.setUntilLongBreak(text.toInt())
+            }
+        }
     }
 }

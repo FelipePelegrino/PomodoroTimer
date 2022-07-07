@@ -19,4 +19,9 @@ object Constants {
     const val APP_DATABASE_VERSION = 1
     const val APP_DATABASE_NAME = "pomodoro_database"
     const val UNIQUE_ROW_DATABASE = 0L
+
+    // SharedPreferences
+    const val KEY_SHARED_PREF_APP = "com.gmail.devepelegrino.pomodorotimer"
+    const val KEY_SHARED_PREF_DARK_MODE = "isdarkmode"
+    const val KEY_SHARED_PREF_ENGLISH = "isenglish"
 }

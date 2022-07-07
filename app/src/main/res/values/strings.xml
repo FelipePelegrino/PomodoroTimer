@@ -24,4 +24,9 @@
     <string name="english_text">English</string>
     <string name="dialog_number_positive_button">Set</string>
     <string name="dialog_number_negative_button">Cancel</string>
+    <string name="dialog_number_title">Select a value</string>
+    <string name="dialog_number_message_focus">Set focus minutes:</string>
+    <string name="dialog_number_message_short_break">Set short break minutes:</string>
+    <string name="dialog_number_message_long_break">Set long break minutes:</string>
+    <string name="dialog_number_message_until_long">Set how many focus until long break:</string>
 </resources>

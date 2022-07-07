@@ -2,7 +2,6 @@ package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 
 import android.app.Application
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.*
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
 import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
@@ -22,6 +21,14 @@ class MainViewModel(
     // Settings
     private lateinit var settingsModel: SettingsModel
     private var pomodoroStateHandle = PomodoroStateHandle()
+
+    private var _isDarkMode = MutableLiveData<Boolean>()
+    val isDarkMode: LiveData<Boolean>
+        get() = _isDarkMode
+
+    private var _isEnglish = MutableLiveData<Boolean>()
+    val isEnglish: LiveData<Boolean>
+        get() = _isEnglish
 
     // CountDownVariables
     private var timerStateNow: TimerState = TimerState.STOP
@@ -47,6 +54,7 @@ class MainViewModel(
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
+        loadSharedPreferences()
         loadSettings()
     }
 
@@ -94,6 +102,11 @@ class MainViewModel(
             _pomodoroState.value = pomodoroStateHandle.getNextState()
             setTimeInUiAfterNextState()
         }
+    }
+
+    private fun loadSharedPreferences() {
+        _isDarkMode.value = SharedPreferencesUtils.getDarkMode(getApplication<Application>().applicationContext)
+        _isEnglish.value = SharedPreferencesUtils.getEnglish(getApplication<Application>().applicationContext)
     }
 
     private fun setCountDownTimer(timeSeconds: Int) {
