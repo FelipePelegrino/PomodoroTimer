@@ -7,11 +7,9 @@ data class SettingsModel(
     var shortBreakMinutes: Int,
     var longBreakMinutes: Int,
     var focusUntilLongBreak: Int,
-    var isDarkMode: Boolean,
     var isAutoResumeTimer: Boolean,
     var isSound: Boolean,
-    var isNotification: Boolean,
-    var isEnglish: Boolean
+    var isNotification: Boolean
 )
 
 fun SettingsEntity.toSettingsModel(): SettingsModel {
@@ -23,9 +21,7 @@ fun SettingsEntity.toSettingsModel(): SettingsModel {
             focusUntilLongBreak = this.untilLongBreak,
             isAutoResumeTimer = this.autoResume,
             isNotification = this.notification,
-            isSound = this.sound,
-            isDarkMode = this.darkMode,
-            isEnglish = this.english
+            isSound = this.sound
         )
     }
 }

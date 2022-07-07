@@ -14,9 +14,7 @@ data class SettingsEntity(
     val untilLongBreak: Int,
     val autoResume: Boolean,
     val notification: Boolean,
-    val sound: Boolean,
-    val darkMode: Boolean,
-    val english: Boolean,
+    val sound: Boolean
 )
 
 fun SettingsModel.toSettingsEntity(): SettingsEntity {
@@ -28,9 +26,7 @@ fun SettingsModel.toSettingsEntity(): SettingsEntity {
             untilLongBreak = this.focusUntilLongBreak,
             autoResume = this.isAutoResumeTimer,
             notification = this.isNotification,
-            sound = this.isSound,
-            darkMode = this.isDarkMode,
-            english = this.isEnglish
+            sound = this.isSound
         )
     }
 }

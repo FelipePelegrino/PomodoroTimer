@@ -3,6 +3,7 @@ package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 import android.app.Application
 import android.os.CountDownTimer
 import androidx.lifecycle.*
+import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsDefault
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
 import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
 import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
@@ -167,17 +168,7 @@ class MainViewModel(
 
     private fun insertDefaultSettings() {
         viewModelScope.launch {
-            settingsModel = SettingsModel(
-                focusMinutes = 25,
-                shortBreakMinutes = 5,
-                longBreakMinutes = 10,
-                focusUntilLongBreak = 4,
-                isDarkMode = false,
-                isAutoResumeTimer = false,
-                isSound = false, //TODO: true
-                isNotification = false, //TODO: true
-                isEnglish = false
-            )
+            settingsModel = SettingsDefault.getSettingsDefault()
             settingsRepository.createSettings(settingsModel)
         }
     }
