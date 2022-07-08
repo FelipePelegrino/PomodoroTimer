@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.NumberPicker
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
@@ -31,7 +30,6 @@ class SettingsDialogFragment : DialogFragment() {
     ): View {
         binding = DialogSettingsBinding.inflate(inflater, container, false)
         setUpSettingsDialog()
-        setOnBackPressed()
         setListeners()
         setObservers()
         return binding.root
@@ -137,21 +135,6 @@ class SettingsDialogFragment : DialogFragment() {
             )[SettingsDialogViewModel::class.java]
             lifecycle.addObserver(viewModel)
         }
-    }
-
-    private fun setOnBackPressed() {
-        requireActivity()
-            .onBackPressedDispatcher
-            .addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    viewModel.closeSettingsDialog()
-                    if (isEnabled) {
-                        isEnabled = false
-                        requireActivity().onBackPressed()
-                    }
-                }
-            }
-            )
     }
 
     private fun openDialogNumberPicker(textView: TextView) {
