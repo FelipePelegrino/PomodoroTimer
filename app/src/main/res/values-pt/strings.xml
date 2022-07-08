@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Pomodoro Timer</string>
+
+    <!-- Pomodoro Screen -->
+    <string name="focus_name">Foco</string>
+    <string name="short_break_name">Intervalo Curto</string>
+    <string name="long_break_name">Intervalo Longo</string>
+    <string name="settings_description">Configuração</string>
+    <string name="play_description">Iniciar</string>
+    <string name="next_description">Próximo</string>
+
+    <!-- Settings Modal -->
+    <string name="settings_title">Configuração</string>
+    <string name="exit_description">Sair</string>
+    <string name="dark_mode_text">Modo noturno</string>
+    <string name="focus_length_text">Duração do foco</string>
+    <string name="short_break_length">Duração do intervalo curto</string>
+    <string name="long_break_length">Duração do intervalo longo</string>
+    <string name="pomodoro_until_long_break">Ciclos até um intervalo longo</string>
+    <string name="auto_resume_timer">Iniciar temporizador automático</string>
+    <string name="notifications_text">Notificações</string>
+    <string name="sound_text">Som</string>
+    <string name="dialog_number_positive_button">Definir</string>
+    <string name="dialog_number_negative_button">Cancelar</string>
+    <string name="dialog_number_title">Selecione um valor</string>
+    <string name="dialog_number_message_focus">Definir minutos de foco:</string>
+    <string name="dialog_number_message_short_break">Definir minutos de intervalo curto:</string>
+    <string name="dialog_number_message_long_break">Definir minutos de intervalo longo:</string>
+    <string name="dialog_number_message_until_long">Defina quantos ciclos pomodoro até uma longa pausa:</string>
+</resources>
