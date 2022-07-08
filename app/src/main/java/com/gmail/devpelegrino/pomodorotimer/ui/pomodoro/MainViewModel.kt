@@ -9,6 +9,7 @@ import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
 import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
 import com.gmail.devpelegrino.pomodorotimer.enums.TimerState
 import com.gmail.devpelegrino.pomodorotimer.util.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.lang.NullPointerException
@@ -30,6 +31,22 @@ class MainViewModel(
     private var _isEnglish = MutableLiveData<Boolean>()
     val isEnglish: LiveData<Boolean>
         get() = _isEnglish
+
+    private var _isAutoResume = MutableLiveData<Boolean>()
+    val isAutoResume: LiveData<Boolean>
+        get() = _isAutoResume
+
+    private var _isNotification = MutableLiveData<Boolean>()
+    val isNotification: LiveData<Boolean>
+        get() = _isNotification
+
+    private var _isSound = MutableLiveData<Boolean>()
+    val isSound: LiveData<Boolean>
+        get() = _isSound
+
+    private var _isSettingsOpen = MutableLiveData<Boolean>()
+    val isSettingsOpen: LiveData<Boolean>
+        get() = _isSettingsOpen
 
     // CountDownVariables
     private var timerStateNow: TimerState = TimerState.STOP
@@ -78,6 +95,31 @@ class MainViewModel(
         handleCountDownTimer(time)
     }
 
+    fun setIsSettingsOpen(isOpen: Boolean) {
+        _isSettingsOpen.value = isOpen
+    }
+
+    fun refreshSettings() {
+        val oldSettings = settingsModel
+        viewModelScope.launch {
+            delay(Constants.DELAY_TO_LOAD_AFTER_SAVE)
+            settingsModel = settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
+            if(oldSettings != settingsModel) {
+                if(isNumberValuesDistinct(oldSettings, settingsModel)) {
+                    resetTimer()
+                }
+                setNoNumberSettings()
+            }
+        }
+    }
+
+    private fun isNumberValuesDistinct(oldSettings: SettingsModel, newSettings: SettingsModel): Boolean {
+        return (oldSettings.focusMinutes != newSettings.focusMinutes ||
+                oldSettings.shortBreakMinutes != newSettings.shortBreakMinutes ||
+                oldSettings.longBreakMinutes != newSettings.longBreakMinutes ||
+                oldSettings.focusUntilLongBreak != newSettings.focusUntilLongBreak )
+    }
+
     private fun handleCountDownTimer(timeMinutes: Int) {
         when (timerStateNow) {
             TimerState.STOP -> {
@@ -99,10 +141,21 @@ class MainViewModel(
             } catch (ex: NullPointerException) {
                 insertDefaultSettings()
             }
-            pomodoroStateHandle.setFocusUntilLong(settingsModel.focusUntilLongBreak)
-            _pomodoroState.value = pomodoroStateHandle.getNextState()
-            setTimeInUiAfterNextState()
+            setNoNumberSettings()
+            resetTimer()
         }
+    }
+
+    private fun resetTimer() {
+        pomodoroStateHandle.setFocusUntilLong(settingsModel.focusUntilLongBreak)
+        _pomodoroState.value = pomodoroStateHandle.getNextState()
+        setTimeInUiAfterNextState()
+    }
+
+    private fun setNoNumberSettings() {
+        _isAutoResume.value = settingsModel.isAutoResumeTimer
+        _isNotification.value = settingsModel.isNotification
+        _isSound.value = settingsModel.isSound
     }
 
     private fun loadSharedPreferences() {

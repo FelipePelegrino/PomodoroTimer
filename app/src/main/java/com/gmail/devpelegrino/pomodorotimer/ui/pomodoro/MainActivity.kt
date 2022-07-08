@@ -32,6 +32,16 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        viewModel.isSettingsOpen.value?.let{
+            if(it) {
+                viewModel.refreshSettings()
+                viewModel.setIsSettingsOpen(false)
+            }
+        }
+    }
+
     private fun setupMainActivity() {
         val database = AppDatabase.getDatabase(application.applicationContext)
         viewModel = ViewModelProvider(
@@ -86,9 +96,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openSettings() {
-        val fragmentManager = supportFragmentManager
+        viewModel.setIsSettingsOpen(true)
         val newFragment = SettingsDialogFragment()
-        val transaction = fragmentManager.beginTransaction()
+        val transaction = supportFragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction
             .add(android.R.id.content, newFragment)

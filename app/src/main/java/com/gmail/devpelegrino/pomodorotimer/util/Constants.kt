@@ -24,4 +24,7 @@ object Constants {
     const val KEY_SHARED_PREF_APP = "com.gmail.devepelegrino.pomodorotimer"
     const val KEY_SHARED_PREF_DARK_MODE = "isdarkmode"
     const val KEY_SHARED_PREF_ENGLISH = "isenglish"
+
+    // Delay
+    const val DELAY_TO_LOAD_AFTER_SAVE = 70L
 }
