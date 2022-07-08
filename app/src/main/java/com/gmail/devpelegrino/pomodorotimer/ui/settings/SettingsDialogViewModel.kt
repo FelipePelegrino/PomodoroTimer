@@ -59,24 +59,18 @@ class SettingsDialogViewModel(
     val isCloseDialog: LiveData<Boolean>
         get() = _isCloseDialog
 
-    // UI Messages
-//    private var _error = MutableLiveData<String>()
-//    val error: LiveData<String>
-//        get() = _error
-
-//    override fun onStart(owner: LifecycleOwner) {
-//        super.onStart(owner)
-//        loadSettings()
-//    }
-
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         loadSharedPreferences()
         loadSettings()
     }
 
-    fun closeSettingsDialog() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         saveSettings()
+    }
+
+    fun closeSettingsDialog() {
         _isCloseDialog.value = true
     }
 
@@ -126,7 +120,7 @@ class SettingsDialogViewModel(
     }
 
     private fun saveSettings() {
-        if(isNeededSave()) {
+        if (isNeededSave()) {
             putSettingsModel()
             viewModelScope.launch {
                 settingsRepository.updateSettings(settingsModel)
