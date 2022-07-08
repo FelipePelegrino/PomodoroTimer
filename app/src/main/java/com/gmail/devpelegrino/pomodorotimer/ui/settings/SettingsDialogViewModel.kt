@@ -51,10 +51,6 @@ class SettingsDialogViewModel(
     val isDarkMode: LiveData<Boolean>
         get() = _isDarkMode
 
-    private var _isEnglish = MutableLiveData<Boolean>()
-    val isEnglish: LiveData<Boolean>
-        get() = _isEnglish
-
     private var _isCloseDialog = MutableLiveData<Boolean>()
     val isCloseDialog: LiveData<Boolean>
         get() = _isCloseDialog
@@ -107,11 +103,6 @@ class SettingsDialogViewModel(
         _isDarkMode.value = isEnable
     }
 
-    fun setEnglish(isEnable: Boolean) {
-        SharedPreferencesUtils.setEnglish(getApplication<Application>().applicationContext, isEnable)
-        _isEnglish.value = isEnable
-    }
-
     private fun loadSettings() {
         viewModelScope.launch {
             settingsModel = settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
@@ -130,7 +121,6 @@ class SettingsDialogViewModel(
 
     private fun loadSharedPreferences() {
         _isDarkMode.value = SharedPreferencesUtils.getDarkMode(getApplication<Application>().applicationContext)
-        _isEnglish.value = SharedPreferencesUtils.getEnglish(getApplication<Application>().applicationContext)
     }
 
     private fun getSettingsModel() = settingsModel.run {

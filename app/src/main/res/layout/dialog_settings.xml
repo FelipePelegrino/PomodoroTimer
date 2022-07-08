@@ -176,24 +176,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/darkModeText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/darkModeText" />
-
-            <TextView
-                android:id="@+id/englishText"
-                style="@style/ModalTextDefaultMargin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/english_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/darkModeText" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/englishSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/englishText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/englishText" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

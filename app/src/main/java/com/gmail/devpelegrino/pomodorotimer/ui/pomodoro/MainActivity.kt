@@ -59,9 +59,6 @@ class MainActivity : AppCompatActivity() {
             this.isDarkMode.observe(this@MainActivity) {
                 ThemeUtils.changeAppTheme(it)
             }
-            this.isEnglish.observe(this@MainActivity) {
-                //TODO: enabled/disabled english
-            }
             this.countDownMinutes.observe(this@MainActivity) {
                 binding.minutesText.text = addZeroLeftToString(it)
             }

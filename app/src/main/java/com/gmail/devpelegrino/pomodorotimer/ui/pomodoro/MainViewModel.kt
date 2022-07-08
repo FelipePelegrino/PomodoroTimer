@@ -28,10 +28,6 @@ class MainViewModel(
     val isDarkMode: LiveData<Boolean>
         get() = _isDarkMode
 
-    private var _isEnglish = MutableLiveData<Boolean>()
-    val isEnglish: LiveData<Boolean>
-        get() = _isEnglish
-
     private var _isAutoResume = MutableLiveData<Boolean>()
     val isAutoResume: LiveData<Boolean>
         get() = _isAutoResume
@@ -160,7 +156,6 @@ class MainViewModel(
 
     private fun loadSharedPreferences() {
         _isDarkMode.value = SharedPreferencesUtils.getDarkMode(getApplication<Application>().applicationContext)
-        _isEnglish.value = SharedPreferencesUtils.getEnglish(getApplication<Application>().applicationContext)
     }
 
     private fun setCountDownTimer(timeSeconds: Int) {

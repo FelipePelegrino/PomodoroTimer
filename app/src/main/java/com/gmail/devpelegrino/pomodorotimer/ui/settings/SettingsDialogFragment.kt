@@ -69,9 +69,6 @@ class SettingsDialogFragment : DialogFragment() {
         darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setDarkMode(isChecked)
         }
-        englishSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setEnglish(isChecked)
-        }
     }
 
     private fun setObservers() = viewModel.run {
@@ -105,10 +102,6 @@ class SettingsDialogFragment : DialogFragment() {
             binding.darkModeSwitch.isChecked = it
             darkModeAction(it)
         }
-        isEnglish.observe(viewLifecycleOwner) {
-            binding.englishSwitch.isChecked = it
-            englishAction(it)
-        }
     }
 
     private fun close() {
@@ -117,10 +110,6 @@ class SettingsDialogFragment : DialogFragment() {
 
     private fun darkModeAction(isEnable: Boolean) {
         ThemeUtils.changeAppTheme(isEnable)
-    }
-
-    private fun englishAction(isEnable: Boolean) {
-        //TODO: Enabled/Disabled english
     }
 
     private fun setUpSettingsDialog() {

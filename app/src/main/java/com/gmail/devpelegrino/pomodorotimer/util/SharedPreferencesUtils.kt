@@ -16,17 +16,6 @@ class SharedPreferencesUtils {
             editor.apply()
         }
 
-        fun getEnglish(context: Context): Boolean {
-            val preferences = getSharedPreferences(context)
-            return preferences.getBoolean(Constants.KEY_SHARED_PREF_ENGLISH, false)
-        }
-
-        fun setEnglish(context: Context, isEnglish: Boolean) {
-            val editor = getSharedPreferences(context).edit()
-            editor.putBoolean(Constants.KEY_SHARED_PREF_ENGLISH, isEnglish)
-            editor.apply()
-        }
-
         private fun getSharedPreferences(context: Context): SharedPreferences {
             return context.getSharedPreferences(Constants.KEY_SHARED_PREF_APP, Context.MODE_PRIVATE)
         }
