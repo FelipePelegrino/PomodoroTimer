@@ -39,10 +39,6 @@ class SettingsDialogViewModel(
     val isAutoResume: LiveData<Boolean>
         get() = _isAutoResume
 
-    private var _isNotification = MutableLiveData<Boolean>()
-    val isNotification: LiveData<Boolean>
-        get() = _isNotification
-
     private var _isSound = MutableLiveData<Boolean>()
     val isSound: LiveData<Boolean>
         get() = _isSound
@@ -90,10 +86,6 @@ class SettingsDialogViewModel(
         _isAutoResume.value = isEnable
     }
 
-    fun setNotifications(isEnable: Boolean) {
-        _isNotification.value = isEnable
-    }
-
     fun setSound(isEnable: Boolean) {
         _isSound.value = isEnable
     }
@@ -129,7 +121,6 @@ class SettingsDialogViewModel(
         _longBreakLength.value = longBreakMinutes
         _untilLongBreak.value = focusUntilLongBreak
         _isAutoResume.value = isAutoResumeTimer
-        _isNotification.value = isNotification
         _isSound.value = isSound
     }
 
@@ -139,7 +130,6 @@ class SettingsDialogViewModel(
         _longBreakLength.value?.let { longBreakMinutes = it }
         _untilLongBreak.value?.let { focusUntilLongBreak = it }
         _isAutoResume.value?.let { isAutoResumeTimer = it }
-        _isNotification.value?.let { isNotification = it }
         _isSound.value?.let { isSound = it }
     }
 
@@ -149,7 +139,6 @@ class SettingsDialogViewModel(
                 _longBreakLength.value != longBreakMinutes ||
                 _untilLongBreak.value != focusUntilLongBreak ||
                 _isAutoResume.value != isAutoResumeTimer ||
-                _isNotification.value != isNotification ||
                 _isSound.value != isSound)
     }
 

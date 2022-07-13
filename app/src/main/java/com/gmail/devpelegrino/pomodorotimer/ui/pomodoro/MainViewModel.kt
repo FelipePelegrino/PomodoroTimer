@@ -32,10 +32,6 @@ class MainViewModel(
     val isAutoResume: LiveData<Boolean>
         get() = _isAutoResume
 
-    private var _isNotification = MutableLiveData<Boolean>()
-    val isNotification: LiveData<Boolean>
-        get() = _isNotification
-
     private var _isSound = MutableLiveData<Boolean>()
     val isSound: LiveData<Boolean>
         get() = _isSound
@@ -150,7 +146,6 @@ class MainViewModel(
 
     private fun setNoNumberSettings() {
         _isAutoResume.value = settingsModel.isAutoResumeTimer
-        _isNotification.value = settingsModel.isNotification
         _isSound.value = settingsModel.isSound
     }
 

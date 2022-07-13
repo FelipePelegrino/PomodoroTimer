@@ -19,7 +19,6 @@
     <string name="long_break_length">Long break length</string>
     <string name="pomodoro_until_long_break">Pomodoro until long break</string>
     <string name="auto_resume_timer">Auto resume timer</string>
-    <string name="notifications_text">Notifications</string>
     <string name="sound_text">Sound</string>
     <string name="dialog_number_positive_button">Set</string>
     <string name="dialog_number_negative_button">Cancel</string>

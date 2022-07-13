@@ -13,7 +13,6 @@ data class SettingsEntity(
     val longBreakLength: Int,
     val untilLongBreak: Int,
     val autoResume: Boolean,
-    val notification: Boolean,
     val sound: Boolean
 )
 
@@ -25,7 +24,6 @@ fun SettingsModel.toSettingsEntity(): SettingsEntity {
             longBreakLength = this.longBreakMinutes,
             untilLongBreak = this.focusUntilLongBreak,
             autoResume = this.isAutoResumeTimer,
-            notification = this.isNotification,
             sound = this.isSound
         )
     }

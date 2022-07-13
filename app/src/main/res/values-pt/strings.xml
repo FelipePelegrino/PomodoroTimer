@@ -20,7 +20,6 @@
     <string name="long_break_length">Duração do intervalo longo</string>
     <string name="pomodoro_until_long_break">Ciclos até um intervalo longo</string>
     <string name="auto_resume_timer">Iniciar temporizador automático</string>
-    <string name="notifications_text">Notificações</string>
     <string name="sound_text">Som</string>
     <string name="dialog_number_positive_button">Definir</string>
     <string name="dialog_number_negative_button">Cancelar</string>

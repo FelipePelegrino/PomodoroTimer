@@ -60,9 +60,6 @@ class SettingsDialogFragment : DialogFragment() {
         autoResumeSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setAutoResume(isChecked)
         }
-        notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setNotifications(isChecked)
-        }
         soundSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setSound(isChecked)
         }
@@ -91,9 +88,6 @@ class SettingsDialogFragment : DialogFragment() {
         }
         isAutoResume.observe(viewLifecycleOwner) {
             binding.autoResumeSwitch.isChecked = it
-        }
-        isNotification.observe(viewLifecycleOwner) {
-            binding.notificationsSwitch.isChecked = it
         }
         isSound.observe(viewLifecycleOwner) {
             binding.soundSwitch.isChecked = it
