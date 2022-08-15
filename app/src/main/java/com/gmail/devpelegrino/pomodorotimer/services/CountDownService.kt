@@ -2,6 +2,7 @@ package com.gmail.devpelegrino.pomodorotimer.services
 
 import android.app.*
 import android.content.Intent
+import android.os.CountDownTimer
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -79,6 +80,7 @@ class CountDownService : Service() {
         stopForeground(true)
         sendStatus()
         pomodoroHandle = null
+        countdownInactive?.cancel()
     }
 
     private fun onTickerNotification(time: Int) {
@@ -234,13 +236,28 @@ class CountDownService : Service() {
                 ID_NOTIFICATION,
                 buildNotification(time)
             )
+            checkInactive()
         }
+    }
+
+    private fun checkInactive() {
+        countdownInactive?.cancel()
+        countdownInactive = null
+        countdownInactive = object : CountDownTimer(TIME_INACTIVE, Constants.MILLISECONDS_TO_ONE_SECOND_LONG) {
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                finishService()
+            }
+        }.start()
     }
 
     companion object {
         private const val ID_NOTIFICATION = 1973
         private const val CHANNEL_ID = "COUNTDOWN_NOTIFICATIONS"
         private const val CHANNEL_NAME = "COUNTDOWN"
+        private const val TIME_INACTIVE = 90000L
+        private var countdownInactive: CountDownTimer? = null
         private var isBackground = false
     }
 }
