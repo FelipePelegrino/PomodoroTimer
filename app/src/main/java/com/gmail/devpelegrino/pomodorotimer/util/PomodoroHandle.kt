@@ -89,11 +89,11 @@ class PomodoroHandle(
         }
     }
 
-    private fun insertDefaultSettings() {
+    private suspend fun insertDefaultSettings() {
         coroutineScope.launch {
             settingsModel = SettingsDefault.getSettingsDefault()
             pomodoroRepository.createSettings(settingsModel)
-        }
+        }.join()
     }
 
     private fun isNumberValuesDistinct(
