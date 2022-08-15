@@ -53,10 +53,10 @@
             <TextView
                 android:id="@+id/focusLength"
                 style="@style/ModalTextNumber"
-                app:layout_constraintTop_toTopOf="@id/focusText"
                 app:layout_constraintBottom_toBottomOf="@id/focusText"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="15"/>
+                app:layout_constraintTop_toTopOf="@id/focusText"
+                tools:text="15" />
 
             <TextView
                 android:id="@+id/shortBreakText"
@@ -70,10 +70,10 @@
             <TextView
                 android:id="@+id/shortBreakLength"
                 style="@style/ModalTextNumber"
-                app:layout_constraintTop_toTopOf="@id/shortBreakText"
                 app:layout_constraintBottom_toBottomOf="@id/shortBreakText"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="15"/>
+                app:layout_constraintTop_toTopOf="@id/shortBreakText"
+                tools:text="15" />
 
             <TextView
                 android:id="@+id/longBreakText"
@@ -87,10 +87,10 @@
             <TextView
                 android:id="@+id/longBreakLength"
                 style="@style/ModalTextNumber"
-                app:layout_constraintTop_toTopOf="@id/longBreakText"
                 app:layout_constraintBottom_toBottomOf="@id/longBreakText"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="15"/>
+                app:layout_constraintTop_toTopOf="@id/longBreakText"
+                tools:text="15" />
 
             <TextView
                 android:id="@+id/pomodoroUntilText"
@@ -104,10 +104,10 @@
             <TextView
                 android:id="@+id/pomodoroUntilLongBreakLength"
                 style="@style/ModalTextNumber"
-                app:layout_constraintTop_toTopOf="@id/pomodoroUntilText"
                 app:layout_constraintBottom_toBottomOf="@id/pomodoroUntilText"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="15"/>
+                app:layout_constraintTop_toTopOf="@id/pomodoroUntilText"
+                tools:text="15" />
 
             <TextView
                 android:id="@+id/autoResumeText"
@@ -142,23 +142,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/soundText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/soundText" />
-
-            <TextView
-                android:id="@+id/darkModeText"
-                style="@style/ModalTextDefaultMargin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dark_mode_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/soundText" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/darkModeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/darkModeText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/darkModeText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

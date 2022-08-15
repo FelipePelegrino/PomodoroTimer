@@ -27,4 +27,11 @@
     <string name="dialog_number_message_short_break">Set short break minutes:</string>
     <string name="dialog_number_message_long_break">Set long break minutes:</string>
     <string name="dialog_number_message_until_long">Set how many focus until long break:</string>
+
+    <!-- Service -->
+    <string name="service_description">Allows background countdown</string>
+    <string name="notification_focus_title">Time to focus!</string>
+    <string name="notification_short_break_title">Time for a short break!</string>
+    <string name="notification_long_break_title">Time for a long break!</string>
+
 </resources>

@@ -5,7 +5,7 @@ import com.gmail.devpelegrino.pomodorotimer.data.entity.SettingsEntity
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
 
 @Dao
-interface SettingsDao {
+interface PomodoroDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSettings(settings: SettingsEntity)

@@ -4,18 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.gmail.devpelegrino.pomodorotimer.data.dao.SettingsDao
+import com.gmail.devpelegrino.pomodorotimer.data.dao.PomodoroDao
 import com.gmail.devpelegrino.pomodorotimer.data.entity.SettingsEntity
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
 
 @Database(
-    entities = [SettingsEntity::class],
+    entities = [
+        SettingsEntity::class
+    ],
     version = Constants.APP_DATABASE_VERSION,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun settingsDao(): SettingsDao
+    abstract fun pomodoroDao(): PomodoroDao
 
     companion object {
         @Volatile

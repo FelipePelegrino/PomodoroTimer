@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Name -->
-    <string name="app_name">Pomodoro Timer</string>
+    <string name="app_name">Temporizador Pomodoro</string>
 
     <!-- Pomodoro Screen -->
     <string name="focus_name">Foco</string>
@@ -28,4 +28,11 @@
     <string name="dialog_number_message_short_break">Definir minutos de intervalo curto:</string>
     <string name="dialog_number_message_long_break">Definir minutos de intervalo longo:</string>
     <string name="dialog_number_message_until_long">Defina quantos ciclos pomodoro até uma longa pausa:</string>
+
+    <!-- Service -->
+    <string name="service_description">Permite a contagem regressiva em segundo plano</string>
+    <string name="notification_focus_title">Hora de focar!</string>
+    <string name="notification_short_break_title">Tempo para uma pequena pausa!</string>
+    <string name="notification_long_break_title">Tempo para uma longa pausa!</string>
+
 </resources>

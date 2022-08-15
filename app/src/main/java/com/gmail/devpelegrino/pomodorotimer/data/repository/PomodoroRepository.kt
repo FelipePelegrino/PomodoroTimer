@@ -2,7 +2,7 @@ package com.gmail.devpelegrino.pomodorotimer.data.repository
 
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
 
-interface SettingsRepository {
+interface PomodoroRepository {
 
     suspend fun createSettings(settings: SettingsModel)
 

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gmail.devpelegrino">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,10 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PomodoroTimer"
         tools:targetApi="31">
+
+        <service
+            android:name=".pomodorotimer.services.CountDownService"
+            android:description="@string/service_description"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name="com.gmail.devpelegrino.pomodorotimer.ui.pomodoro.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,5 +1,9 @@
 package com.gmail.devpelegrino.pomodorotimer.ui.pomodoro
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,12 +11,15 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.pomodorotimer.data.database.AppDatabase
-import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsDataSource
+import com.gmail.devpelegrino.pomodorotimer.data.repository.PomodoroDataSource
 import com.gmail.devpelegrino.databinding.ActivityMainBinding
 import com.gmail.devpelegrino.pomodorotimer.enums.PomodoroState
+import com.gmail.devpelegrino.pomodorotimer.services.CountDownService
 import com.gmail.devpelegrino.pomodorotimer.ui.settings.SettingsDialogFragment
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
-import com.gmail.devpelegrino.pomodorotimer.util.ThemeUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var longBreak: PomodoroStateUI
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var statusReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +42,61 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        viewModel.isSettingsOpen.value?.let{
-            if(it) {
+        viewModel.isSettingsOpen.value?.let {
+            if (it) {
                 viewModel.refreshSettings()
                 viewModel.setIsSettingsOpen(false)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        configureStartService(Constants.MOVE_TO_BACKGROUND)
+        getReceiverService()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(statusReceiver)
+    }
+
+    private fun getReceiverService() {
+        val statusFilter = IntentFilter()
+        statusFilter.addAction(Constants.COUNTDOWN_STATUS)
+        statusReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                val timerState = p1?.getStringExtra(Constants.COUNTDOWN_STATE) ?: "STOP"
+                viewModel.setTimerState(timerState)
+            }
+        }
+        registerReceiver(statusReceiver, statusFilter)
+    }
+
+    private fun configureStartService(
+        action: String,
+        timeSeconds: Int? = null,
+        timerState: String? = null
+    ) {
+        val countDownService = Intent(this, CountDownService::class.java)
+        countDownService.putExtra(
+            Constants.COUNTDOWN_ACTION,
+            action
+        )
+        timeSeconds?.let {
+            countDownService.putExtra(
+                Constants.ACTION_TIME,
+                it
+            )
+        }
+        timerState?.let {
+            countDownService.putExtra(
+                Constants.COUNTDOWN_STATE,
+                it
+            )
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            startService(countDownService)
         }
     }
 
@@ -48,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             this,
             MainViewModel.MainViewModelFactory(
                 application = application,
-                settingsRepository = SettingsDataSource(database.settingsDao())
+                pomodoroRepository = PomodoroDataSource(database.pomodoroDao())
             ),
         )[MainViewModel::class.java]
         lifecycle.addObserver(viewModel)
@@ -56,9 +114,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.run {
-            this.isDarkMode.observe(this@MainActivity) {
-                ThemeUtils.changeAppTheme(it)
-            }
             this.countDownMinutes.observe(this@MainActivity) {
                 binding.minutesText.text = addZeroLeftToString(it)
             }
@@ -83,6 +138,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             this.pomodoroState.observe(this@MainActivity) { updateUI(it) }
+            this.startForeground.observe(this@MainActivity) {
+                if (it) {
+                    setStartForegroundFalse()
+                    configureStartService(action = Constants.MOVE_TO_FOREGROUND)
+                }
+            }
         }
     }
 

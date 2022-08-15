@@ -13,10 +13,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.pomodorotimer.data.database.AppDatabase
-import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsDataSource
+import com.gmail.devpelegrino.pomodorotimer.data.repository.PomodoroDataSource
 import com.gmail.devpelegrino.databinding.DialogSettingsBinding
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
-import com.gmail.devpelegrino.pomodorotimer.util.ThemeUtils
 
 class SettingsDialogFragment : DialogFragment() {
 
@@ -63,9 +62,6 @@ class SettingsDialogFragment : DialogFragment() {
         soundSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setSound(isChecked)
         }
-        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setDarkMode(isChecked)
-        }
     }
 
     private fun setObservers() = viewModel.run {
@@ -92,18 +88,10 @@ class SettingsDialogFragment : DialogFragment() {
         isSound.observe(viewLifecycleOwner) {
             binding.soundSwitch.isChecked = it
         }
-        isDarkMode.observe(viewLifecycleOwner) {
-            binding.darkModeSwitch.isChecked = it
-            darkModeAction(it)
-        }
     }
 
     private fun close() {
         requireActivity().onBackPressed()
-    }
-
-    private fun darkModeAction(isEnable: Boolean) {
-        ThemeUtils.changeAppTheme(isEnable)
     }
 
     private fun setUpSettingsDialog() {
@@ -113,7 +101,7 @@ class SettingsDialogFragment : DialogFragment() {
                 this,
                 SettingsDialogViewModel.SettingsDialogViewModelFactory(
                     application = application,
-                    settingsRepository = SettingsDataSource(database.settingsDao())
+                    pomodoroRepository = PomodoroDataSource(database.pomodoroDao())
                 )
             )[SettingsDialogViewModel::class.java]
             lifecycle.addObserver(viewModel)

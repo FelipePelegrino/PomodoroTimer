@@ -3,15 +3,14 @@ package com.gmail.devpelegrino.pomodorotimer.ui.settings
 import android.app.Application
 import androidx.lifecycle.*
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
-import com.gmail.devpelegrino.pomodorotimer.data.repository.SettingsRepository
+import com.gmail.devpelegrino.pomodorotimer.data.repository.PomodoroRepository
 import com.gmail.devpelegrino.pomodorotimer.util.Constants
-import com.gmail.devpelegrino.pomodorotimer.util.SharedPreferencesUtils
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class SettingsDialogViewModel(
     application: Application,
-    private val settingsRepository: SettingsRepository
+    private val pomodoroRepository: PomodoroRepository
 ) : AndroidViewModel(application),
     DefaultLifecycleObserver {
 
@@ -43,17 +42,12 @@ class SettingsDialogViewModel(
     val isSound: LiveData<Boolean>
         get() = _isSound
 
-    private var _isDarkMode = MutableLiveData<Boolean>()
-    val isDarkMode: LiveData<Boolean>
-        get() = _isDarkMode
-
     private var _isCloseDialog = MutableLiveData<Boolean>()
     val isCloseDialog: LiveData<Boolean>
         get() = _isCloseDialog
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        loadSharedPreferences()
         loadSettings()
     }
 
@@ -90,14 +84,9 @@ class SettingsDialogViewModel(
         _isSound.value = isEnable
     }
 
-    fun setDarkMode(isEnable: Boolean) {
-        SharedPreferencesUtils.setDarkMode(getApplication<Application>().applicationContext, isEnable)
-        _isDarkMode.value = isEnable
-    }
-
     private fun loadSettings() {
         viewModelScope.launch {
-            settingsModel = settingsRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
+            settingsModel = pomodoroRepository.getSetting(Constants.UNIQUE_ROW_DATABASE)
             getSettingsModel()
         }
     }
@@ -106,13 +95,9 @@ class SettingsDialogViewModel(
         if (isNeededSave()) {
             putSettingsModel()
             viewModelScope.launch {
-                settingsRepository.updateSettings(settingsModel)
+                pomodoroRepository.updateSettings(settingsModel)
             }
         }
-    }
-
-    private fun loadSharedPreferences() {
-        _isDarkMode.value = SharedPreferencesUtils.getDarkMode(getApplication<Application>().applicationContext)
     }
 
     private fun getSettingsModel() = settingsModel.run {
@@ -144,7 +129,7 @@ class SettingsDialogViewModel(
 
     class SettingsDialogViewModelFactory constructor(
         private val application: Application,
-        private val settingsRepository: SettingsRepository
+        private val pomodoroRepository: PomodoroRepository
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -152,7 +137,7 @@ class SettingsDialogViewModel(
                 when {
                     isAssignableFrom(SettingsDialogViewModel::class.java) -> SettingsDialogViewModel(
                         application,
-                        settingsRepository
+                        pomodoroRepository
                     )
                     else -> throw IllegalArgumentException("Class not found")
                 }

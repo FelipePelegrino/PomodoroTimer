@@ -6,7 +6,7 @@ object Constants {
     const val MILLISECONDS_TO_ONE_SECOND_LONG = 1000L
     const val SECONDS_TO_ONE_MINUTE = 60
     const val TEN_SECONDS = 10
-    const val DELAY_COUNT_DOWN = 500L
+    const val DELAY_COUNTDOWN = 250L
 
     // Settings
     const val MAX_FOCUS_MINUTES = 90
@@ -20,10 +20,18 @@ object Constants {
     const val APP_DATABASE_NAME = "pomodoro_database"
     const val UNIQUE_ROW_DATABASE = 0L
 
-    // SharedPreferences
-    const val KEY_SHARED_PREF_APP = "com.gmail.devepelegrino.pomodorotimer"
-    const val KEY_SHARED_PREF_DARK_MODE = "isdarkmode"
-
     // Delay
     const val DELAY_TO_LOAD_AFTER_SAVE = 70L
+
+    // Service Actions
+    const val MOVE_TO_FOREGROUND = "MOVE_TO_FOREGROUND"
+    const val MOVE_TO_BACKGROUND = "MOVE_TO_BACKGROUND"
+    const val ACTION_TIME = "ACTION_TIME"
+
+    // Intent Extras
+    const val COUNTDOWN_ACTION = "COUNTDOWN_ACTION"
+    const val COUNTDOWN_STATE = "COUNTDOWN_STATE"
+
+    // Intent Actions
+    const val COUNTDOWN_STATUS = "COUNTDOWN_STATUS"
 }
