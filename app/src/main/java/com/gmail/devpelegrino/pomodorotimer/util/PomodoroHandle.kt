@@ -200,6 +200,9 @@ class PomodoroHandle(
                 lastTimerState = TimerState.STOP
                 nextStage()
                 onTimerFinish()
+                if(settingsModel.isAutoResumeTimer) {
+                    actionCountDown()
+                }
             }
         }
     }
