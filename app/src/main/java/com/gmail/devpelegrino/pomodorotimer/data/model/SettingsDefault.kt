@@ -8,8 +8,8 @@ class SettingsDefault {
                 shortBreakMinutes = 5,
                 longBreakMinutes = 10,
                 focusUntilLongBreak = 4,
-                isAutoResumeTimer = false,
-                isSound = true
+                isAutoResumeTimer = true,
+                isSound = false
             )
         }
     }
