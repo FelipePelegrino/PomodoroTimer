@@ -2,7 +2,7 @@
 
 * Uma aplicação desenvolvida para o estudo da linguagem kotlin e diversas técnicas da programação mobile para Android.
 
-<img src="/github/Running.gif" width="600">
+<img src="/github/Running.gif" width="500">
 
 ### Tecnologias | Ferramentas
 
@@ -35,7 +35,7 @@
 * Ao miminizar o app continua contabilizando o tempo em foreground, exibindo notificação com o tempo atualizado
 * Caso o temporizador esteja pausado/parado e o usuário não fez nenhuma ação nos ultimos 90segundos, a notificação será desabilitada automaticamente.
 
-<img src="/github/Settings.gif" width="600">
+<img src="/github/Settings.gif" width="500">
 
 ### Referências
 
