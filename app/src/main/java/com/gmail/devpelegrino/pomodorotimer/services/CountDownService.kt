@@ -39,9 +39,10 @@ class CountDownService : Service() {
 
         val database = AppDatabase.getDatabase(application.applicationContext)
         pomodoroHandle = PomodoroHandle(
+            context = applicationContext,
             pomodoroRepository = PomodoroDataSource(database.pomodoroDao()),
             onTimerTicker = { allSeconds -> onTickerNotification(allSeconds) },
-            onTimerFinish = { finishService() }
+            onTimerFinish = { updateNotification(PomodoroHandle.countDownTimeSecondsLeft) }
         )
 
         when (intent?.getStringExtra(Constants.COUNTDOWN_ACTION)) {
@@ -124,90 +125,28 @@ class CountDownService : Service() {
 
     private fun buildNotification(time: Int? = null): Notification {
 
-        val title: String
-        var minutes: Int
-        var seconds: Int
+        val minutes: Int
+        val seconds: Int
 
-        minutes = countDownSecondsLeft.getMinuteByTotalSeconds()
-        seconds = countDownSecondsLeft.getSecondsInMinuteByTotalSeconds()
+        val title = when (pomodoroState) {
+            PomodoroState.FOCUS -> getString(R.string.notification_focus_title)
+            PomodoroState.SHORT_BREAK -> getString(R.string.notification_short_break_title)
+            PomodoroState.LONG_BREAK -> getString(R.string.notification_long_break_title)
+        }
 
-        time?.let {
-            minutes = it.getMinuteByTotalSeconds()
-            seconds = it.getSecondsInMinuteByTotalSeconds()
+        if (time == null) {
+            minutes = countDownSecondsLeft.getMinuteByTotalSeconds()
+            seconds = countDownSecondsLeft.getSecondsInMinuteByTotalSeconds()
+        } else {
+            minutes = time.getMinuteByTotalSeconds()
+            seconds = time.getSecondsInMinuteByTotalSeconds()
         }
 
         val intent = Intent(this, MainActivity::class.java)
         val pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
-        val pomodoroStateUi: PomodoroStateUI =
-            when (pomodoroState) {
-                PomodoroState.FOCUS -> {
-                    title = getString(R.string.notification_focus_title)
-                    PomodoroStateUI(
-                        name = getString(R.string.focus_name),
-                        primaryColor = resources.getColor(
-                            R.color.colorFocus,
-                            applicationContext.theme
-                        ),
-                        secondaryColor = resources.getColor(
-                            R.color.colorFocusSecondary,
-                            applicationContext.theme
-                        ),
-                        tertiaryColor = resources.getColor(
-                            R.color.colorFocusTertiary,
-                            applicationContext.theme
-                        ),
-                        iconSrc = resources.getDrawable(
-                            R.drawable.ic_focus,
-                            applicationContext.theme
-                        )
-                    )
-                }
-                PomodoroState.SHORT_BREAK -> {
-                    title = getString(R.string.notification_short_break_title)
-                    PomodoroStateUI(
-                        name = getString(R.string.short_break_name),
-                        primaryColor = resources.getColor(
-                            R.color.colorShortBreak,
-                            applicationContext.theme
-                        ),
-                        secondaryColor = resources.getColor(
-                            R.color.colorShortBreakSecondary,
-                            applicationContext.theme
-                        ),
-                        tertiaryColor = resources.getColor(
-                            R.color.colorShortBreakTertiary,
-                            applicationContext.theme
-                        ),
-                        iconSrc = resources.getDrawable(
-                            R.drawable.ic_coffee,
-                            applicationContext.theme
-                        )
-                    )
-                }
-                PomodoroState.LONG_BREAK -> {
-                    title = getString(R.string.notification_long_break_title)
-                    PomodoroStateUI(
-                        name = getString(R.string.long_break_name),
-                        primaryColor = resources.getColor(
-                            R.color.colorLongBreak,
-                            applicationContext.theme
-                        ),
-                        secondaryColor = resources.getColor(
-                            R.color.colorLongBreakSecondary,
-                            applicationContext.theme
-                        ),
-                        tertiaryColor = resources.getColor(
-                            R.color.colorLongBreakTertiary,
-                            applicationContext.theme
-                        ),
-                        iconSrc = resources.getDrawable(
-                            R.drawable.ic_coffee,
-                            applicationContext.theme
-                        )
-                    )
-                }
-            }
+        val pomodoroStateUi = getPomodoroStateUi()
+
 
         //                when (timerState) {
 //                    TimerState.RUNNING -> _setStartIcon.value = false
@@ -243,13 +182,82 @@ class CountDownService : Service() {
     private fun checkInactive() {
         countdownInactive?.cancel()
         countdownInactive = null
-        countdownInactive = object : CountDownTimer(TIME_INACTIVE, Constants.MILLISECONDS_TO_ONE_SECOND_LONG) {
-            override fun onTick(millisUntilFinished: Long) {}
+        countdownInactive =
+            object : CountDownTimer(TIME_INACTIVE, Constants.MILLISECONDS_TO_ONE_SECOND_LONG) {
+                override fun onTick(millisUntilFinished: Long) {}
 
-            override fun onFinish() {
-                finishService()
+                override fun onFinish() {
+                    finishService()
+                }
+            }.start()
+    }
+
+    private fun getPomodoroStateUi(): PomodoroStateUI {
+        return when (pomodoroState) {
+            PomodoroState.FOCUS -> {
+                PomodoroStateUI(
+                    name = getString(R.string.focus_name),
+                    primaryColor = resources.getColor(
+                        R.color.colorFocus,
+                        applicationContext.theme
+                    ),
+                    secondaryColor = resources.getColor(
+                        R.color.colorFocusSecondary,
+                        applicationContext.theme
+                    ),
+                    tertiaryColor = resources.getColor(
+                        R.color.colorFocusTertiary,
+                        applicationContext.theme
+                    ),
+                    iconSrc = resources.getDrawable(
+                        R.drawable.ic_focus,
+                        applicationContext.theme
+                    )
+                )
             }
-        }.start()
+            PomodoroState.SHORT_BREAK -> {
+                PomodoroStateUI(
+                    name = getString(R.string.short_break_name),
+                    primaryColor = resources.getColor(
+                        R.color.colorShortBreak,
+                        applicationContext.theme
+                    ),
+                    secondaryColor = resources.getColor(
+                        R.color.colorShortBreakSecondary,
+                        applicationContext.theme
+                    ),
+                    tertiaryColor = resources.getColor(
+                        R.color.colorShortBreakTertiary,
+                        applicationContext.theme
+                    ),
+                    iconSrc = resources.getDrawable(
+                        R.drawable.ic_coffee,
+                        applicationContext.theme
+                    )
+                )
+            }
+            PomodoroState.LONG_BREAK -> {
+                PomodoroStateUI(
+                    name = getString(R.string.long_break_name),
+                    primaryColor = resources.getColor(
+                        R.color.colorLongBreak,
+                        applicationContext.theme
+                    ),
+                    secondaryColor = resources.getColor(
+                        R.color.colorLongBreakSecondary,
+                        applicationContext.theme
+                    ),
+                    tertiaryColor = resources.getColor(
+                        R.color.colorLongBreakTertiary,
+                        applicationContext.theme
+                    ),
+                    iconSrc = resources.getDrawable(
+                        R.drawable.ic_coffee,
+                        applicationContext.theme
+                    )
+                )
+            }
+        }
     }
 
     companion object {

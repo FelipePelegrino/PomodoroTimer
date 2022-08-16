@@ -1,6 +1,9 @@
 package com.gmail.devpelegrino.pomodorotimer.util
 
+import android.content.Context
 import android.os.CountDownTimer
+import androidx.annotation.RawRes
+import com.gmail.devpelegrino.R
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsDefault
 import com.gmail.devpelegrino.pomodorotimer.data.model.SettingsModel
 import com.gmail.devpelegrino.pomodorotimer.data.repository.PomodoroRepository
@@ -15,12 +18,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PomodoroHandle(
+    private val context: Context,
     private val pomodoroRepository: PomodoroRepository,
     private val onTimerTicker: (countDownTimerLeft: Int) -> Unit,
     private val onTimerFinish: () -> Unit
 ) {
 
     private var coroutineScope = CoroutineScope(Dispatchers.IO)
+    private var mediaPlayerUtils: MediaPlayerUtils? = null
 
     val pomodoroState = _pomodoroStateFlow.asStateFlow()
     val timerState = _timerStateFlow.asStateFlow()
@@ -45,6 +50,9 @@ class PomodoroHandle(
                 }
                 resetState()
                 nextStage()
+                if (settingsModel.isSound) {
+                    mediaPlayerUtils = MediaPlayerUtils(context)
+                }
             }
             classHasBeenOpened = true
         } else {
@@ -72,12 +80,18 @@ class PomodoroHandle(
             TimerState.STOP -> {
                 countDownTimer = getCountDownTimer(timeMillis = time)
                 countDownTimer?.start()
+                stopSound()
+                playSoundPomodoro()
             }
             TimerState.PAUSE -> {
                 countDownTimer = getCountDownTimer(timeMillis = time)
                 countDownTimer?.start()
+                stopSound()
+                playSoundPomodoro()
             }
             else -> {
+                stopSound()
+                isCountDownSoundPlaying = false
                 lastTimerState = TimerState.PAUSE
                 countDownTimer?.cancel()
                 countDownTimer = null
@@ -190,9 +204,15 @@ class PomodoroHandle(
             override fun onTick(millisUntilFinished: Long) {
                 countDownTimeSecondsLeft = millisUntilFinished.getSecondsByMillis()
                 onTimerTicker(millisUntilFinished.getSecondsByMillis())
+                if (countDownTimeSecondsLeft < 31 && !isCountDownSoundPlaying) {
+                    isCountDownSoundPlaying = true
+                    startSound(R.raw.clock)
+                }
             }
 
             override fun onFinish() {
+                isCountDownSoundPlaying = false
+                stopSound()
                 _timeSecondsScreen.update {
                     0
                 }
@@ -200,7 +220,7 @@ class PomodoroHandle(
                 lastTimerState = TimerState.STOP
                 nextStage()
                 onTimerFinish()
-                if(settingsModel.isAutoResumeTimer) {
+                if (settingsModel.isAutoResumeTimer) {
                     actionCountDown()
                 }
             }
@@ -222,17 +242,46 @@ class PomodoroHandle(
         lastPomodoroState = PomodoroState.LONG_BREAK
     }
 
+    private fun playSoundPomodoro() {
+        when (lastPomodoroState) {
+            PomodoroState.FOCUS -> startSound(R.raw.focus)
+            else -> startSound(R.raw.next)
+        }
+    }
+
+    private fun startSound(@RawRes soundId: Int) {
+        if (settingsModel.isSound) {
+            mediaPlayerUtils?.let { media ->
+                if (media.isMediaPlaying()) {
+                    media.stopSound()
+                    media.playSound(soundId)
+                } else {
+                    media.playSound(soundId)
+                }
+            }
+        }
+    }
+
+    private fun stopSound() {
+        mediaPlayerUtils?.let { media ->
+            if (media.isMediaPlaying()) {
+                media.stopSound()
+            }
+        }
+    }
+
     companion object {
+        private lateinit var settingsModel: SettingsModel
+        private var isCountDownSoundPlaying = false
         private var focusUntilLongBreak = 0
         private var lastPomodoroState = PomodoroState.LONG_BREAK
-        var lastTimerState = TimerState.STOP
         private var classHasBeenOpened = false
-        private lateinit var settingsModel: SettingsModel
         private val _pomodoroStateFlow = MutableStateFlow(PomodoroState.LONG_BREAK)
         private val _timeSecondsScreen = MutableStateFlow(0)
         private val _timerStateFlow = MutableStateFlow(TimerState.STOP)
 
-        var countDownTimer: CountDownTimer? = null
+        var lastTimerState = TimerState.STOP
         var countDownTimeSecondsLeft = 0
+        var countDownTimer: CountDownTimer? = null
     }
 }

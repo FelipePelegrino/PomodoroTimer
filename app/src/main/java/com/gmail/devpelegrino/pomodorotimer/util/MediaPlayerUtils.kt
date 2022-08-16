@@ -5,7 +5,8 @@ import android.media.MediaPlayer
 import androidx.annotation.RawRes
 
 class MediaPlayerUtils(private val context: Context) {
-    private val mediaPlayer = MediaPlayer().apply {
+
+    private var mediaPlayer: MediaPlayer = MediaPlayer().apply {
         setOnPreparedListener { start() }
         setOnCompletionListener { reset() }
     }
@@ -14,12 +15,25 @@ class MediaPlayerUtils(private val context: Context) {
         val assetFileDescriptor = context.resources.openRawResourceFd(rawResId) ?: return
         mediaPlayer.run {
             reset()
-            setDataSource(assetFileDescriptor.fileDescriptor, assetFileDescriptor.startOffset, assetFileDescriptor.declaredLength)
+            setDataSource(
+                assetFileDescriptor.fileDescriptor,
+                assetFileDescriptor.startOffset,
+                assetFileDescriptor.declaredLength
+            )
             prepareAsync()
         }
     }
 
-    /*
-    * chamar o método release do próprio mediaPlayer e receber null para desalocar os recursos
-    * */
+    fun stopSound() {
+        mediaPlayer.stop()
+        mediaPlayer.release()
+        mediaPlayer = MediaPlayer().apply {
+            setOnPreparedListener { start() }
+            setOnCompletionListener { reset() }
+        }
+    }
+
+    fun isMediaPlaying(): Boolean {
+        return mediaPlayer.isPlaying
+    }
 }

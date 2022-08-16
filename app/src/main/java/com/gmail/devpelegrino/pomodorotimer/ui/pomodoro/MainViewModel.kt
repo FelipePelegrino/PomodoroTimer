@@ -36,6 +36,7 @@ class MainViewModel(
 
     // Pomodoro
     private var pomodoroHandle = PomodoroHandle(
+        context = application.applicationContext,
         pomodoroRepository = pomodoroRepository,
         onTimerTicker = { convertTime(it) },
         onTimerFinish = { }
